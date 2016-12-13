@@ -7,7 +7,14 @@ let Elixir = {
     inProduction: process.env.NODE_ENV === 'production',
     sourcemaps: false,
     cssPreprocessor: null,
-    hash: false
+    hash: false,
+    entry() {
+        if (this.cssPreprocessor) {
+            return [this.js.entry, this[this.cssPreprocessor].src];
+        }
+
+        return this.js.entry;
+    }
 };
 
 Elixir.File = class {
@@ -31,6 +38,10 @@ Elixir.File = class {
 
             fs.writeFileSync(this.file, css);
         }
+    }
+
+    write(body) {
+        fs.writeFileSync(this.file, body);
     }
 };
 
@@ -144,7 +155,7 @@ module.exports = {
      * Enable sourcemap support.
      */
     sourceMaps() {
-        Elixir.sourcemaps = true;
+        Elixir.sourcemaps = (Elixir.inProduction ? '#eval-source-map' : '#source-map');
 
         return this;
     },

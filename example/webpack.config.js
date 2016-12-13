@@ -23,7 +23,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     // We'll first specify the Webpack entry point into our application. If a 
     // preprocessor is being used, we'll add it as a secondary entrypoint.
-    entry: Elixir.cssPreprocessor ? [Elixir.js.entry, Elixir[Elixir.cssPreprocessor].src] : Elixir.js.entry,
+    entry: Elixir.entry(),
 
     // Next, we need to specify our desired output path for the bundled Webpack file.
     // If the user called `Elixir.version()`, we'll hash/cache the output as well.
@@ -115,7 +115,7 @@ module.exports.resolve = {
  |
  */
 
-module.exports.devtool = Elixir.sourcemaps ? (Elixir.inProduction ? '#eval-source-map' : '#source-map') : false;
+module.exports.devtool = Elixir.sourcemaps;
 
 
 
@@ -158,11 +158,10 @@ module.exports.plugins = [
     // your server-side code may read this file to detect the cached 
     // file name.
     function() {
-        this.plugin("done", stats => {
-            fs.writeFileSync(
-                path.join(__dirname, "storage/logs/stats.json"),
-                JSON.stringify(stats.toJson())
-            );
+        this.plugin('done', stats => {
+            new Elixir.File(
+                path.join(__dirname, 'storage/logs/stats.json')
+            ).write(JSON.stringify(stats.toJson()));
         });
     }
 ];
