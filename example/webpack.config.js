@@ -9,31 +9,34 @@ var WebpackNotifierPlugin = require('webpack-notifier');
 var WebpackOnBuildPlugin = require('on-build-webpack');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
+
 /*
  |--------------------------------------------------------------------------
- | The Webpack Config File
+ | Webpack Entry
  |--------------------------------------------------------------------------
  |
- | This is the master Webpack configuration file. It can be overwhelming
- | at first, which is why we provide Elixir to hide much of the 
- | complexity. Nonetheless, you may modify it as needed.
+ | We'll first specify the Webpack entry point into our application. If a 
+ | preprocessor is being used, we'll add it as a secondary entrypoint.
  |
  */
 
-module.exports = {
-    // We'll first specify the Webpack entry point into our application. If a 
-    // preprocessor is being used, we'll add it as a secondary entrypoint.
-    entry: Elixir.entry(),
-
-    // Next, we need to specify our desired output path for the bundled Webpack file.
-    // If the user called `Elixir.version()`, we'll hash/cache the output as well.
-    output: {
-        path: path.resolve(__dirname, Elixir.js.output.base),
-        filename: Elixir.hash ? Elixir.js.output.hashedFile : Elixir.js.output.file
-    }
-}
+module.exports.entry = Elixir.entry();
 
 
+/*
+ |--------------------------------------------------------------------------
+ | Webpack Output
+ |--------------------------------------------------------------------------
+ |
+ | Next, we need to specify our desired output path for the bundled Webpack file.
+ | If the user called `Elixir.version()`, we'll hash/cache the output as well.
+ |
+ */
+
+module.exports.output = {
+    path: path.resolve(__dirname, Elixir.js.output.base),
+    filename: Elixir.hash ? Elixir.js.output.hashedFile : Elixir.js.output.file
+};
 
 
 /*
@@ -83,8 +86,6 @@ if (Elixir.less) {
 }
 
 
-
-
 /*
  |--------------------------------------------------------------------------
  | Resolve
@@ -102,8 +103,6 @@ module.exports.resolve = {
 };
 
 
-
-
 /*
  |--------------------------------------------------------------------------
  | Devtool
@@ -116,8 +115,6 @@ module.exports.resolve = {
  */
 
 module.exports.devtool = Elixir.sourcemaps;
-
-
 
 
 /*
