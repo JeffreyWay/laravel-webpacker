@@ -19,7 +19,7 @@ Elixir.File = class {
     minify() {
         if (this.fileType === '.js') {
             fs.writeFileSync(
-                this.path,
+                this.file,
                 uglify.minify(this.file)
             );
         }
@@ -127,6 +127,17 @@ module.exports = {
 
         return this;
     },
+
+    /**
+     * Minify the provided file.
+     * 
+     * @param  {string|array}  src  
+     */
+    minify(src) {
+        Elixir.minify = (Elixir.minify || []).concat(src);
+
+        return this;
+    },    
 
 
     /**
