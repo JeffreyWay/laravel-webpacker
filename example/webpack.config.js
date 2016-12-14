@@ -6,7 +6,7 @@ var plugins = require('./webpack.elixir').plugins;
 
 /*
  |--------------------------------------------------------------------------
- | Webpack Entry
+ | Webpack Entrya
  |--------------------------------------------------------------------------
  |
  | We'll first specify the Webpack entry point into our application. If a 
@@ -48,12 +48,21 @@ module.exports.module = {
     rules: [
         {
             test: /\.vue$/,
-            loader: 'vue-loader'
+            loader: 'vue-loader',
+            options: {
+                // vue-loader options
+                loaders: {
+                    js: 'babel-loader?cacheDirectory=true'
+                  },
+                  postcss: [
+                    require('autoprefixer')
+                ]
+            }
         },
 
         {
             test: /\.js$/,
-            loader: 'babel-loader',
+            loader: 'babel-loader?cacheDirectory=true',
             exclude: /(node_modules|bower_components)/
         }
     ]
