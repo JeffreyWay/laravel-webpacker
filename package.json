@@ -22,20 +22,19 @@
     "concatenate": "0.0.1",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.0.0-beta.4",
+    "fs": "0.0.1-security",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
     "node-sass": "^4.0.0",
     "on-build-webpack": "^0.1.0",
+    "path": "^0.12.7",
+    "postcss-loader": "^1.2.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "uglify-js": "^2.7.5",
     "vue-loader": "^10.0.2",
     "vue-template-compiler": "^2.1.4",
     "webpack": "^2.1.0-beta.27",
-    "webpack-notifier": "^1.4.1",
-    "clean-css": "^3.4.22",
-    "fs": "0.0.1-security",
-    "path": "^0.12.7",
-    "uglify-js": "^2.7.5"
+    "webpack-notifier": "^1.4.1"
   }
 }

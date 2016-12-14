@@ -59,23 +59,26 @@ module.exports.module = {
     ]
 };
 
+
 if (Elixir.sass) {
     module.exports.module.rules.push({
-        test: /\.scss$/,
+        test: /\.s[ac]ss$/,
         loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
-            loader: ['css-loader', 'sass-loader']
+            loader: ['css-loader', 'postcss-loader', 'sass-loader']
         })
     });
 }
+
 
 if (Elixir.less) {
     module.exports.module.rules.push({
         test: /\.less$/,
         loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
-            loader: ['css-loader', 'less-loader']
-        })
+            loader: ['css-loader', 'postcss-loader', 'less-loader']
+        }),
+        
     });
 }
 
@@ -123,11 +126,13 @@ module.exports.devtool = Elixir.sourcemaps;
 
 module.exports.plugins = [];
 
+
 // We want an OS notification for all first/failed compilations.
 // If you hate notifications, feel free to delete this line.
 module.exports.plugins.push(
     new plugins.WebpackNotifierPlugin()
 );
+
 
 // We need to register a hook for when Webpack is finished with
 // its build. That way, we can perform various non-Webpack
@@ -137,6 +142,7 @@ module.exports.plugins.push(
         Elixir.concatenateAll().minifyAll();
     })
 );
+
 
 // We'll write the build stats to a file, just in case. In particular, 
 // your server-side code may read this file to detect the cached 
@@ -151,6 +157,7 @@ module.exports.plugins.push(
     }
 );
 
+
 // If the user called `Elixir.sass()` or `Elixir.less()`, we'll 
 // keep things traditional, and enable the necessary plugin to 
 // extract the CSS to its own, dedicated file. 
@@ -164,6 +171,7 @@ if (Elixir.cssPreprocessor) {
         )
     );
 }
+
 
 // Certain plugins are only appropriate during production. If 
 // NODE_ENV=production, we'll optimize the bundle as such.
@@ -187,7 +195,12 @@ if (Elixir.inProduction) {
         }),
 
         new webpack.LoaderOptionsPlugin({
-            minimize: true
+            minimize: true,
+            options: {
+                postcss: [ 
+                    require('autoprefixer')
+                ]
+            }
         })
     ]);
 }
