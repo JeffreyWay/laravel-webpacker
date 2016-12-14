@@ -1,5 +1,5 @@
-let path = require('path');
 let fs = require('fs');
+let path = require('path');
 var uglify = require('uglify-js');
 var UglifyCss = require('clean-css');
 
@@ -11,17 +11,9 @@ var UglifyCss = require('clean-css');
  * @param  {string}  output 
  */
 module.exports.js = (entry, output) => {
-    let outputSegments = path.parse(output);
-
     Elixir.js = {
-        entry: entry,
-        output: {
-            path: output,
-            hashedPath: `${outputSegments.dir}/${outputSegments.name}.[hash]${outputSegments.ext}`,
-            base: outputSegments.dir,
-            file: outputSegments.base,
-            hashedFile: `${outputSegments.name}.[hash]${outputSegments.ext}`
-        },
+        entry,
+        output: new File(output).parsePath()
     };
 
     return this;
@@ -35,18 +27,9 @@ module.exports.js = (entry, output) => {
  * @param  {string}  output 
  */
 module.exports.sass = (src, output) => {
-    let outputSegments = path.parse(output);
-
     Elixir.sass = {
-        src: src,
-        output: {
-            path: output,
-            hashedPath: `${outputSegments.dir}/${outputSegments.name}.[hash]${outputSegments.ext}`,
-            base: outputSegments.dir,
-            file: outputSegments.base,
-            name: outputSegments.name,
-            ext: outputSegments.ext
-        }
+        src,
+        output: new File(output).parsePath()
     };
 
     Elixir.cssPreprocessor = 'sass';
@@ -62,18 +45,9 @@ module.exports.sass = (src, output) => {
  * @param  {string}  output 
  */
 module.exports.less = (src, output) => {
-    let outputSegments = path.parse(output);
-
     Elixir.less = {
-        src: src,
-        output: {
-            path: output,
-            hashedPath: `${outputSegments.dir}/${outputSegments.name}.[hash]${outputSegments.ext}`,
-            base: outputSegments.dir,
-            file: outputSegments.base,
-            name: outputSegments.name,
-            ext: outputSegments.ext
-        }
+        src,
+        output: new File(output).parsePath()
     };
 
     Elixir.cssPreprocessor = 'less';
@@ -89,10 +63,7 @@ module.exports.less = (src, output) => {
  * @param  {string}        output 
  */
 module.exports.combine = (src, output) => {
-    Elixir.combine = (Elixir.combine || []).concat({
-        src: src,
-        output: output
-    });
+    Elixir.combine = (Elixir.combine || []).concat({ src, output });
 
     return this;
 };
@@ -133,7 +104,7 @@ module.exports.version = () => {
 let Elixir = {
     inProduction: process.env.NODE_ENV === 'production',
     sourcemaps: false,
-    cssPreprocessor: null,
+    cssPreprocessor: false,
     hash: false,
     entry() {
         if (this.cssPreprocessor) {
@@ -174,6 +145,7 @@ Elixir.File = class {
         }
     }
 
+
     /**
      * Write the given contents to the file.
      * 
@@ -182,6 +154,24 @@ Elixir.File = class {
     write(body) {
         fs.writeFileSync(this.file, body);
     }
+
+
+    /**
+     * Parse the file path into segments.
+     */
+    parsePath() {
+        let outputSegments = path.parse(this.file);
+
+        return {
+            path: output,
+            hashedPath: `${outputSegments.dir}/${outputSegments.name}.[hash]${outputSegments.ext}`,
+            base: outputSegments.dir,
+            file: outputSegments.base,
+            hashedFile: `${outputSegments.name}.[hash]${outputSegments.ext}`,
+            name: outputSegments.name,
+            ext: outputSegments.ext
+        };
+    } 
 };
 
 
