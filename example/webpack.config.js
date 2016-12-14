@@ -6,7 +6,7 @@ var plugins = require('./webpack.elixir').plugins;
 
 /*
  |--------------------------------------------------------------------------
- | Webpack Entrya
+ | Webpack Entry
  |--------------------------------------------------------------------------
  |
  | We'll first specify the Webpack entry point into our application. If a 
