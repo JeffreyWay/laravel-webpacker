@@ -111,11 +111,35 @@ module.exports.version = () => {
 
 
 let Elixir = {
+    /**
+     * Determine the current environment.
+     */
     inProduction: process.env.NODE_ENV === 'production',
+
+
+    /**
+     * Should we apply sourcemaps when bundling?
+     */
     sourcemaps: false,
+
+
+    /**
+     * Which CSS preprocessor, if any, are we using.
+     *
+     * Options: sass, less
+     */
     cssPreprocessor: false,
+
+
+    /**
+     * Should the bundled JS/CSS be versioned?
+     */
     hash: false,
 
+
+    /**
+     * Determine the Webpack entry file.
+     */
     entry() {
         if (this.cssPreprocessor) {
             return [this.js.entry, this[this.cssPreprocessor].src];
@@ -123,7 +147,13 @@ let Elixir = {
 
         return this.js.entry;
     },
+    
 
+    /**
+     * Minify the given files, or those from Elixir.minify().
+     * 
+     * @param  array|null files 
+     */
     minifyAll(files = null) {
         if (! this.inProduction) return;
 
@@ -133,7 +163,13 @@ let Elixir = {
 
         return this;
     },
+
     
+    /**
+     * Concat the given files, or those from Elixir.combine().
+     * 
+     * @param  array|null files 
+     */
     concatenateAll(files = null) {
         files = files || this.combine || [];
 
@@ -142,7 +178,7 @@ let Elixir = {
 
             if (! this.inProduction) return;
 
-            new Elixir.File(file.output).minify();
+            new File(file.output).minify();
         });
 
         return this;
