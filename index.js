@@ -211,7 +211,7 @@ let File = Elixir.File = class {
                 fs.readFileSync(this.file, { encoding: 'utf-8' })
             ).styles;
 
-            fs.writeFileSync(this.file, css);
+            this.write(css);
         }
     }
 
