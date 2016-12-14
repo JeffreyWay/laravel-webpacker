@@ -7,10 +7,10 @@ var UglifyCss = require('clean-css');
 
 // Webpack.config.js Plugins
 module.exports.plugins = {
-    concatenate: require('concatenate');
-    WebpackNotifierPlugin: require('webpack-notifier');
-    WebpackOnBuildPlugin: require('on-build-webpack');
-    ExtractTextPlugin: require("extract-text-webpack-plugin");
+    concatenate: require('concatenate'),
+    WebpackNotifierPlugin: require('webpack-notifier'),
+    WebpackOnBuildPlugin: require('on-build-webpack'),
+    ExtractTextPlugin: require("extract-text-webpack-plugin")
 }
 
 

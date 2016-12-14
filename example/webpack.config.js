@@ -1,6 +1,6 @@
 var path = require('path');
 var Elixir = require('./elixir').config;
-var plugins - require('./elixir').plugins;
+var plugins = require('./elixir').plugins;
 
 
 /*
