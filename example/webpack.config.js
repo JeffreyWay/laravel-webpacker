@@ -206,16 +206,12 @@ if (Elixir.cssPreprocessor) {
 // NODE_ENV=production, we'll optimize the bundle as such.
 if (Elixir.inProduction) {
     module.exports.plugins = module.exports.plugins.concat([
-        // This will hunt down any occurrence of the 'process.env' string
-        // and replace it with "production."
         new webpack.DefinePlugin({
             'process.env': {
                 NODE_ENV: '"production"'
             }
         }),
 
-        // Minification should only take place during production, 
-        // since it's a time-consuming process.
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: true,
             compress: { 
