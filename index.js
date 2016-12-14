@@ -110,6 +110,16 @@ module.exports.version = () => {
 };
 
 
+/**
+ * Disable OS notifications.
+ */
+module.exports.disableNotifications = () => {
+    Elixir.notifications = false;
+
+    return this;
+};
+
+
 let Elixir = {
     /**
      * Determine the current environment.
@@ -135,6 +145,12 @@ let Elixir = {
      * Should the bundled JS/CSS be versioned?
      */
     hash: false,
+
+
+    /**
+     * Should we display notifications?
+     */
+    notifications: true
 
 
     /**

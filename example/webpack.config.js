@@ -49,11 +49,11 @@ module.exports.module = {
         {
             test: /\.vue$/,
             loader: 'vue-loader',
-            options: {
-                // vue-loader options
+            options: { // vue-loader options
                 loaders: {
                     js: 'babel-loader?cacheDirectory=true'
                   },
+                  // Add any PostCSS plugins you want here.
                   postcss: [
                     require('autoprefixer')
                 ]
@@ -138,9 +138,15 @@ module.exports.plugins = [];
 
 // We want an OS notification for all first/failed compilations.
 // If you hate notifications, feel free to delete this line.
-module.exports.plugins.push(
-    new plugins.WebpackNotifierPlugin()
-);
+if (Elixir.notifications) {
+    module.exports.plugins.push(
+        new plugins.WebpackNotifierPlugin({
+            title: 'Laravel Elixir',
+            alwaysNotify: true,
+            contentImage: path.join(__dirname, 'node_modules/laravel-webpacker/icons/laravel.png')
+        })
+    );
+}
 
 
 // We need to register a hook for when Webpack is finished with
