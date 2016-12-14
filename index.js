@@ -207,12 +207,18 @@ let File = Elixir.File = class {
         }
 
         if (this.fileType === '.css') {
-            let css = new UglifyCss().minify(
-                fs.readFileSync(this.file, { encoding: 'utf-8' })
-            ).styles;
-
-            this.write(css);
+            this.write(
+                new UglifyCss().minify(this.read()).styles
+            );
         }
+    }
+
+
+    /**
+     * Read the file.
+     */
+    read() {
+        return fs.readFileSync(this.file, { encoding: 'utf-8' });
     }
 
 
