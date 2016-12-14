@@ -121,33 +121,27 @@ module.exports.devtool = Elixir.sourcemaps;
  |
  */
 
-module.exports.plugins = [
-    // We want an OS notification for all first/failed compilations.
-    // If you hate notifications, feel free to delete this line.
-    new plugins.WebpackNotifierPlugin(),
+module.exports.plugins = [];
 
-    // We need to register a hook for when Webpack is finished with
-    // its build. That way, we can perform various non-Webpack
-    // specific tasks, such as conctenation/minification.
+// We want an OS notification for all first/failed compilations.
+// If you hate notifications, feel free to delete this line.
+module.exports.plugins.push(
+    new plugins.WebpackNotifierPlugin()
+);
+
+// We need to register a hook for when Webpack is finished with
+// its build. That way, we can perform various non-Webpack
+// specific tasks, such as conctenation/minification.
+module.exports.plugins.push(
     new plugins.WebpackOnBuildPlugin(stats => {
-        (Elixir.combine || []).forEach(toCombine => {
-            plugins.concatenate.sync(toCombine.src, toCombine.output);
+        Elixir.concatenateAll().minifyAll();
+    })
+);
 
-            if (! Elixir.inProduction) return;
-
-            new Elixir.File(toCombine.output).minify();
-        });
-
-        (Elixir.minify || []).forEach(toMinify => {
-            if (! Elixir.inProduction) return;
-
-            new Elixir.File(toMinify).minify();
-        });
-    }),
-
-    // We'll write the build stats to a file, just in case. In particular, 
-    // your server-side code may read this file to detect the cached 
-    // file name.
+// We'll write the build stats to a file, just in case. In particular, 
+// your server-side code may read this file to detect the cached 
+// file name.
+module.exports.plugins.push(
     function() {
         this.plugin('done', stats => {
             new Elixir.File(
@@ -155,7 +149,7 @@ module.exports.plugins = [
             ).write(JSON.stringify(stats.toJson()));
         });
     }
-];
+);
 
 // If the user called `Elixir.sass()` or `Elixir.less()`, we'll 
 // keep things traditional, and enable the necessary plugin to 
@@ -190,6 +184,10 @@ if (Elixir.inProduction) {
             compress: { 
                 warnings: false 
             }
+        }),
+
+        new webpack.LoaderOptionsPlugin({
+            minimize: true
         })
     ]);
 }

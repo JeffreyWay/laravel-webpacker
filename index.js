@@ -5,7 +5,7 @@ var UglifyCss = require('clean-css');
 
 
 // Webpack.config.js Plugins
-module.exports.plugins = {
+let plugins = module.exports.plugins = {
     concatenate: require('concatenate'),
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
@@ -115,12 +115,37 @@ let Elixir = {
     sourcemaps: false,
     cssPreprocessor: false,
     hash: false,
+
     entry() {
         if (this.cssPreprocessor) {
             return [this.js.entry, this[this.cssPreprocessor].src];
         }
 
         return this.js.entry;
+    },
+
+    minifyAll(files = null) {
+        if (! this.inProduction) return;
+
+        files = files || this.minify || [];
+
+        files.forEach(file => new File(file).minify());
+
+        return this;
+    },
+    
+    concatenateAll(files = null) {
+        files = files || this.combine || [];
+
+        files.forEach(file => {
+            plugins.concatenate.sync(file.src, file.output);
+
+            if (! this.inProduction) return;
+
+            new Elixir.File(file.output).minify();
+        });
+
+        return this;
     }
 };
 
