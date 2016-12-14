@@ -1,6 +1,5 @@
 let fs = require('fs');
 let path = require('path');
-var webpack = require('webpack');
 var uglify = require('uglify-js');
 var UglifyCss = require('clean-css');
 
@@ -126,7 +125,7 @@ let Elixir = {
 };
 
 
-Elixir.File = class {
+let File = Elixir.File = class {
     /**
      * Create a new File instance.
      * 
@@ -173,7 +172,7 @@ Elixir.File = class {
         let outputSegments = path.parse(this.file);
 
         return {
-            path: output,
+            path: this.file,
             hashedPath: `${outputSegments.dir}/${outputSegments.name}.[hash]${outputSegments.ext}`,
             base: outputSegments.dir,
             file: outputSegments.base,
