@@ -125,6 +125,20 @@ module.exports.devtool = Elixir.sourcemaps;
 
 /*
  |--------------------------------------------------------------------------
+ | Stats
+ |--------------------------------------------------------------------------
+ |
+ | By default, Webpack spits a lot of information out to the terminal, 
+ | each you time you run. Let's keep things a bit more minimal,
+ | however, you're of course free to delete this if you wish.
+ |
+ */
+
+module.exports.stats = 'none';
+
+
+/*
+ |--------------------------------------------------------------------------
  | Plugins
  |--------------------------------------------------------------------------
  |
