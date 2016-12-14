@@ -7,6 +7,11 @@
     "dev": "webpack --watch --progress --debug",
     "production": "export NODE_ENV=production && webpack --progress"
   },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
   "keywords": [
     "laravel",
     "webpack",
@@ -28,6 +33,7 @@
     "node-sass": "^4.0.0",
     "on-build-webpack": "^0.1.0",
     "path": "^0.12.7",
+    "postcss-load-config": "^1.0.0",
     "postcss-loader": "^1.2.1",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
