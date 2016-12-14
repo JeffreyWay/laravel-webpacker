@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var Elixir = require('./elixir').config;
-var plugins = require('./elixir').plugins;
+var Elixir = require('./webpack.elixir').config;
+var plugins = require('./webpack.elixir').plugins;
 
 
 /*
