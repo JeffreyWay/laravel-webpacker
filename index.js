@@ -9,7 +9,7 @@ let plugins = module.exports.plugins = {
     concatenate: require('concatenate'),
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
-    ExtractTextPlugin: require("extract-text-webpack-plugin")
+    ExtractTextPlugin: require('extract-text-webpack-plugin')
 }
 
 
