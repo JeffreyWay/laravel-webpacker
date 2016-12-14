@@ -1,7 +1,17 @@
 let fs = require('fs');
 let path = require('path');
+var webpack = require('webpack');
 var uglify = require('uglify-js');
 var UglifyCss = require('clean-css');
+
+
+// Webpack.config.js Plugins
+module.exports.plugins = {
+    concatenate: require('concatenate');
+    WebpackNotifierPlugin: require('webpack-notifier');
+    WebpackOnBuildPlugin: require('on-build-webpack');
+    ExtractTextPlugin: require("extract-text-webpack-plugin");
+}
 
 
 /**
@@ -175,4 +185,4 @@ Elixir.File = class {
 };
 
 
-module.exports.tasks = Elixir;
+module.exports.config = Elixir;

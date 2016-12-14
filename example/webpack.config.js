@@ -1,12 +1,6 @@
 var path = require('path');
-var webpack = require('webpack');
-var uglify = require('uglify-js');
-var UglifyCss = require('clean-css');
-var Elixir = require('./elixir').tasks;
-var concatenate = require('concatenate');
-var WebpackNotifierPlugin = require('webpack-notifier');
-var WebpackOnBuildPlugin = require('on-build-webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var Elixir = require('./elixir').config;
+var plugins - require('./elixir').plugins;
 
 
 /*
@@ -67,7 +61,7 @@ module.exports.module = {
 if (Elixir.sass) {
     module.exports.module.rules.push({
         test: /\.scss$/,
-        loader: ExtractTextPlugin.extract({
+        loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
             loader: ['css-loader', 'sass-loader']
         })
@@ -77,7 +71,7 @@ if (Elixir.sass) {
 if (Elixir.less) {
     module.exports.module.rules.push({
         test: /\.less$/,
-        loader: ExtractTextPlugin.extract({
+        loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
             loader: ['css-loader', 'less-loader']
         })
@@ -129,14 +123,14 @@ module.exports.devtool = Elixir.sourcemaps;
 module.exports.plugins = [
     // We want an OS notification for all first/failed compilations.
     // If you hate notifications, feel free to delete this line.
-    new WebpackNotifierPlugin(),
+    new plugins.WebpackNotifierPlugin(),
 
     // We need to register a hook for when Webpack is finished with
     // its build. That way, we can perform various non-Webpack
     // specific tasks, such as conctenation/minification.
-    new WebpackOnBuildPlugin(stats => {
+    new plugins.WebpackOnBuildPlugin(stats => {
         (Elixir.combine || []).forEach(toCombine => {
-            concatenate.sync(toCombine.src, toCombine.output);
+            plugins.concatenate.sync(toCombine.src, toCombine.output);
 
             if (! Elixir.inProduction) return;
 
@@ -167,7 +161,7 @@ module.exports.plugins = [
 // extract the CSS to its own, dedicated file. 
 if (Elixir.cssPreprocessor) {
     module.exports.plugins.push(
-        new ExtractTextPlugin(
+        new plugins.ExtractTextPlugin(
             path.relative(
                 Elixir.js.output.base, 
                 Elixir[Elixir.cssPreprocessor].output[Elixir.hash ? 'hashedPath' : 'path']
