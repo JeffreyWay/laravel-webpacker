@@ -19,6 +19,20 @@ module.exports.entry = Elixir.entry();
 
 /*
  |--------------------------------------------------------------------------
+ | Stats
+ |--------------------------------------------------------------------------
+ |
+ | By default, Webpack spits a lot of information out to the terminal, 
+ | each you time you run. Let's keep things a bit more minimal,
+ | however, you're of course free to delete this if you wish.
+ |
+ */
+
+module.exports.stats = 'none';
+
+
+/*
+ |--------------------------------------------------------------------------
  | Webpack Output
  |--------------------------------------------------------------------------
  |
@@ -125,20 +139,6 @@ module.exports.devtool = Elixir.sourcemaps;
 
 /*
  |--------------------------------------------------------------------------
- | Stats
- |--------------------------------------------------------------------------
- |
- | By default, Webpack spits a lot of information out to the terminal, 
- | each you time you run. Let's keep things a bit more minimal,
- | however, you're of course free to delete this if you wish.
- |
- */
-
-module.exports.stats = 'none';
-
-
-/*
- |--------------------------------------------------------------------------
  | Plugins
  |--------------------------------------------------------------------------
  |
@@ -171,6 +171,16 @@ module.exports.plugins.push(
         Elixir.concatenateAll().minifyAll();
     })
 );
+
+
+// This allows you to run Elixir.copy() to copy any number 
+// of files/directories as you need. Note that the copy
+// will only take place, if the file is modified.
+if (Elixir.copy) {
+    module.exports.plugins.push(
+        new plugins.CopyWebpackPlugin(Elixir.copy)
+    );
+}
 
 
 // We'll write the build stats to a file, just in case. In particular, 

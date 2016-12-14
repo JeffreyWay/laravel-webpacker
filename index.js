@@ -9,7 +9,8 @@ let plugins = module.exports.plugins = {
     concatenate: require('concatenate'),
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
-    ExtractTextPlugin: require('extract-text-webpack-plugin')
+    ExtractTextPlugin: require('extract-text-webpack-plugin'),
+    CopyWebpackPlugin: require('copy-webpack-plugin')
 }
 
 
@@ -73,6 +74,22 @@ module.exports.less = (src, output) => {
  */
 module.exports.combine = (src, output) => {
     Elixir.combine = (Elixir.combine || []).concat({ src, output });
+
+    return this;
+};
+
+
+/**
+ * Copy one or more files to a new location.
+ * 
+ * @param  {string}  from
+ * @param  {string}  to
+ */
+module.exports.copy = (from, to) => {
+    Elixir.copy = (Elixir.copy || []).concat({ 
+        from, 
+        to: path.resolve(__dirname, '../../', to)
+    });
 
     return this;
 };
