@@ -150,7 +150,7 @@ let Elixir = {
     /**
      * Should we display notifications?
      */
-    notifications: true
+    notifications: true,
 
 
     /**
