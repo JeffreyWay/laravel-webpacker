@@ -267,7 +267,9 @@ if (Elixir.inProduction) {
             options: {
                 postcss: [ 
                     require('autoprefixer')
-                ]
+                ],
+                context: __dirname,
+                output: { path: './' }
             }
         })
     ]);

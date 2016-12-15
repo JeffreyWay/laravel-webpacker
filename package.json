@@ -4,7 +4,7 @@
   "description": "The next version of Laravel Elixir.",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --watch --progress",
+    "dev": "webpack --watch --progress --hide-modules",
     "production": "export NODE_ENV=production && webpack --progress --hide-modules"
   },
   "postcss": {
