@@ -179,9 +179,11 @@ module.exports.plugins.push(
 // of files/directories as you need. Note that the copy
 // will only take place, if the file is modified.
 if (Elixir.copy) {
-    module.exports.plugins.push(
-        new plugins.CopyWebpackPlugin(Elixir.copy)
-    );
+    Elixir.copy.forEach(copy => {
+        module.exports.plugins.push(
+            new plugins.CopyWebpackPlugin([copy])
+        );
+    });
 }
 
 
