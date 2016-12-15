@@ -1,7 +1,10 @@
 let path = require('path');
 let Elixir = require('./Elixir');
 
-// Webpack.config.js Plugins
+
+/**
+ * We'll fetch some Webpack config plugins here for cleanliness.
+ */
 module.exports.plugins = {
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
