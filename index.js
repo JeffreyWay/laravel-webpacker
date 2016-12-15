@@ -17,16 +17,28 @@ module.exports.plugins = {
  * Register the Webpack entry/output paths.
  * 
  * @param  {mixed}   entry  
- * @param  {string}  output 
+ * @param  {string}  output
  */
 module.exports.js = (entry, output) => {
     Elixir.js = {
         entry,
-        output: new Elixir.File(output).parsePath()
+        output: new Elixir.File(output).parsePath(),
+        vendor: false
     };
 
     return this;
 };
+
+
+/**
+ * Libraries to extract to their own vendor.js lib.
+ * This helps drastically with long-term caching.
+ * 
+ * @param  {array}  libs 
+ */
+module.exports.extract = (libs = []) => {
+    Elixir.js.vendor = libs;
+}
 
 
 /**

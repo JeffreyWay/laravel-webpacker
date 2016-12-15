@@ -1,4 +1,6 @@
 let concatenate = require('concatenate');
+let path = require('path');
+let File = require('./File');
 
 module.exports = {
     /**
@@ -43,6 +45,25 @@ module.exports = {
 
         return this.js.entry;
     },
+
+
+    /**
+     * Determine the Webpack output path.
+     */
+    output() {
+        let filename;
+
+        if (this.js.vendor) {
+            filename = this.hash ? '[chunkhash].[name].js' : '[name].js';
+        } else {
+            filename = this.hash ? this.js.output.hashedFile : this.js.output.file;
+        }
+
+        return {
+            path: path.resolve(__dirname, '../../', this.js.output.base),
+            filename
+        };
+    },
     
 
     /**
@@ -84,5 +105,5 @@ module.exports = {
     /**
      * The File dependency,
      */
-    File: require('./File')
+    File: File
 };

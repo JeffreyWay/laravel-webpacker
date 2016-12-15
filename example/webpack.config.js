@@ -14,24 +14,11 @@ var plugins = require('./webpack.elixir').plugins;
  |
  */
 
-module.exports.entry = Elixir.entry();
+module.exports.entry = { app: Elixir.entry() };
 
-
-/*
- |--------------------------------------------------------------------------
- | Stats
- |--------------------------------------------------------------------------
- |
- | By default, Webpack spits a lot of information out to the terminal, 
- | each you time you run. Let's keep things a bit more minimal,
- | however, you're of course free to delete this if you wish.
- |
- */
-
-module.exports.stats = {
-    hash: false
-};
-
+if (Elixir.js.vendor) {
+    module.exports.entry.vendor = Elixir.js.vendor;
+}
 
 /*
  |--------------------------------------------------------------------------
@@ -43,10 +30,7 @@ module.exports.stats = {
  |
  */
 
-module.exports.output = {
-    path: path.resolve(__dirname, Elixir.js.output.base),
-    filename: Elixir.hash ? Elixir.js.output.hashedFile : Elixir.js.output.file
-};
+module.exports.output = Elixir.output();
 
 
 /*
@@ -127,6 +111,22 @@ module.exports.resolve = {
 
 /*
  |--------------------------------------------------------------------------
+ | Stats
+ |--------------------------------------------------------------------------
+ |
+ | By default, Webpack spits a lot of information out to the terminal, 
+ | each you time you run. Let's keep things a bit more minimal,
+ | however, you're of course free to delete this if you wish.
+ |
+ */
+
+module.exports.stats = {
+    hash: false
+};
+
+
+/*
+ |--------------------------------------------------------------------------
  | Devtool
  |--------------------------------------------------------------------------
  |
@@ -197,6 +197,18 @@ module.exports.plugins.push(
         });
     }
 );
+
+
+// Grouping application code with vendor libraries is 
+// terrible for caching. Instead, we'll extract 
+// all vendor code to a dedicated file.
+if (Elixir.js.vendor) {
+    module.exports.plugins.push(
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor', 'manifest']
+        })
+    );
+}
 
 
 // If the user called `Elixir.sass()` or `Elixir.less()`, we'll 
