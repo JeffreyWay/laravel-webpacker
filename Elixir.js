@@ -25,7 +25,7 @@ module.exports = {
 
 
     /**
-     * Should the bundled JS/CSS be versioned?
+     * Versioning configuration, if enabled.
      */
     versioning: new Versioning(),
 
@@ -37,7 +37,7 @@ module.exports = {
 
 
     /**
-     * Determine the Webpack entry file.
+     * Determine the Webpack entry file(s).
      */
     entry() {
         if (this.cssPreprocessor) {
@@ -70,7 +70,7 @@ module.exports = {
     /**
      * Minify the given files, or those from Elixir.minify().
      * 
-     * @param  array|null  files 
+     * @param array|null files 
      */
     minifyAll(files = null) {
         if (! this.inProduction) return;
@@ -84,9 +84,9 @@ module.exports = {
 
     
     /**
-     * Concat the given files, or those from Elixir.combine().
+     * Combine the given files, or those from Elixir.combine().
      * 
-     * @param  array|null  files 
+     * @param array|null files 
      */
     concatenateAll(files = null) {
         files = files || this.combine || [];
@@ -104,7 +104,7 @@ module.exports = {
 
 
     /**
-     * The File dependency,
+     * File can handle various read/write operations.
      */
     File: File
 };

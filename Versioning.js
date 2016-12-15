@@ -73,9 +73,9 @@ class Versioning {
 
     /**
      * Record any newly versioned files, and then delete
-     * the old ones, that are no longer needed.
+     * the old ones that are no longer needed.
      * 
-     * @param  {string}  baseDir 
+     * @param {string} baseDir 
      */
     prune(baseDir) {
         let updatedVersions = new Versioning(this.manifestPath).enable().record();
@@ -90,6 +90,7 @@ class Versioning {
             }
         });
 
+        // Lastly, we'll replace the versioned file list with the new one.
         this.files = updatedVersions.files;
 
         return this;

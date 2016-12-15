@@ -12,7 +12,7 @@ Elixir.js('./resources/assets/js/app.js', './public/js/bundle.js')
 // Elixir.copy(from, to);
 // Elixir.minify(file);
 // Elixir.sourceMaps(); // Enable sourcemaps
-// Elixir.version(); // Enable hashing.
+// Elixir.version({ manifestPath: './path.json' }); // Enable versioning.
 // Elixir.disableNotifications();
 
 module.exports = Elixir;

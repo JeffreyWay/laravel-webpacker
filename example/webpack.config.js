@@ -9,8 +9,9 @@ var plugins = require('./webpack.elixir').plugins;
  | Webpack Entry
  |--------------------------------------------------------------------------
  |
- | We'll first specify the Webpack entry point into our application. If a 
- | preprocessor is being used, we'll add it as a secondary entrypoint.
+ | We'll first specify the entry point for Webpack. By default, we'll
+ | assume a single bundled file, but you may call Elixir.extract()
+ | to make a separate bundle specifically for vendor libraries.
  |
  */
 
@@ -26,8 +27,9 @@ if (Elixir.js.vendor) {
  | Webpack Output
  |--------------------------------------------------------------------------
  |
- | Next, we need to specify our desired output path for the bundled Webpack file.
- | If the user called `Elixir.version()`, we'll hash/cache the output as well.
+ | Webpack naturally requires us to specify our desired output path and
+ | file name. We'll simply echo what you passed to with Elixir.js().
+ | Note that, for Elixir.version(), we'll properly hash the file.
  |
  */
 
@@ -39,9 +41,9 @@ module.exports.output = Elixir.output();
  | Rules
  |--------------------------------------------------------------------------
  |
- | We may now register any loaders/rules for Webpack. Feel free to 
- | modify these to fit your project's needs. Otherwise, the 
- | default should do fine.
+ | Webpack rules allow us to register any number of loaders and options.
+ | Out of the box, we'll provide a handful to get you up and running
+ | as quickly as possible, though feel free to add to this list.
  |
  */
 
@@ -50,7 +52,7 @@ module.exports.module = {
         {
             test: /\.vue$/,
             loader: 'vue-loader',
-            options: { // vue-loader options
+            options: {
                 loaders: {
                     js: 'babel-loader?cacheDirectory=true'
                   },
@@ -91,7 +93,10 @@ if (Elixir.sass) {
         test: /\.s[ac]ss$/,
         loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
-            loader: ['css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader?sourceMap']
+            loader: [
+                'css-loader', 'postcss-loader', 
+                'resolve-url-loader', 'sass-loader?sourceMap'
+            ]
         })
     });
 }
@@ -102,7 +107,10 @@ if (Elixir.less) {
         test: /\.less$/,
         loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
-            loader: ['css-loader', 'postcss-loader', 'resolve-url-loader', 'less-loader']
+            loader: [
+                'css-loader', 'postcss-loader', 
+                'resolve-url-loader', 'less-loader?sourceMap'
+            ]
         })
     });
 }
@@ -113,8 +121,9 @@ if (Elixir.less) {
  | Resolve
  |--------------------------------------------------------------------------
  |
- | Here, we may set any options/aliases that affect the resolving of modules.
- | To start, we'll provide the appropriate alias for Vue 2.
+ | Here, we may set any options/aliases that affect Webpack's resolving
+ | of modules. To begin, we will provide the necessary Vue alias to
+ | load the Vue common library. You may delete this, if needed.
  |
  */
 
@@ -131,8 +140,8 @@ module.exports.resolve = {
  |--------------------------------------------------------------------------
  |
  | By default, Webpack spits a lot of information out to the terminal, 
- | each you time you run. Let's keep things a bit more minimal,
- | however, you're of course free to delete this if you wish.
+ | each you time you compile. Let's keep things a bit more minimal
+ | and hide a few of those bits and pieces. Adjust as you wish.
  |
  */
 
@@ -148,9 +157,9 @@ module.exports.stats = {
  | Devtool
  |--------------------------------------------------------------------------
  |
- | If the user requests sourcemap support, with `Elixir.sourceMaps()`, we'll provide 
- | a sensible default, depependent upon the environment. Again, feel free to modify
- | this as needed.
+ | Sourcemaps allow us to access our original source code within the
+ | browser, even if we're serving a bundled script or stylesheet.
+ | You may activate sourcemaps, by adding Elixir.sourceMaps().
  |
  */
 
@@ -162,16 +171,15 @@ module.exports.devtool = Elixir.sourcemaps;
  | Plugins
  |--------------------------------------------------------------------------
  |
- | Lastly, we'll register a number of plugins to extend Webpack. Plugins allow
- | both authors and you to extend the underlying behavior of Webpack.
+ | Lastly, we'll register a number of plugins to extend and configure 
+ | Webpack. To get you started, we've included a handful of useful
+ | extensions, for versioning, OS notifications, and much more.
  |
  */
 
 module.exports.plugins = [];
 
 
-// We want an OS notification for all first/failed compilations.
-// If you hate notifications, feel free to delete this line.
 if (Elixir.notifications) {
     module.exports.plugins.push(
         new plugins.WebpackNotifierPlugin({
@@ -183,8 +191,6 @@ if (Elixir.notifications) {
 }
 
 
-// If versioning is enabled, we'll immediately read the 
-// assets.json file, and record the list of files.
 if (Elixir.versioning.enabled) {
     module.exports.plugins.push(
         new plugins.AssetsPlugin({
@@ -197,15 +203,10 @@ if (Elixir.versioning.enabled) {
 }
 
 
-// We need to register a hook for when Webpack is finished with
-// its build. That way, we can perform various non-Webpack
-// specific tasks, such as conctenation/minification.
 module.exports.plugins.push(
     new plugins.WebpackOnBuildPlugin(stats => {
         Elixir.concatenateAll().minifyAll();
 
-        // Delete all old versioned files, which have now 
-        // been replaced with new hashes.
         if (Elixir.versioning.enabled) {
             Elixir.versioning.prune(Elixir.js.output.base);
         }
@@ -213,9 +214,6 @@ module.exports.plugins.push(
 );
 
 
-// This allows you to run Elixir.copy() to copy any number 
-// of files/directories as you need. Note that the copy
-// will only take place, if the file is modified.
 if (Elixir.copy) {
     Elixir.copy.forEach(copy => {
         module.exports.plugins.push(
@@ -225,9 +223,6 @@ if (Elixir.copy) {
 }
 
 
-// Grouping application code with vendor libraries is 
-// terrible for caching. Instead, we'll extract 
-// all vendor code to a dedicated file.
 if (Elixir.js.vendor) {
     module.exports.plugins.push(
         new webpack.optimize.CommonsChunkPlugin({
@@ -237,9 +232,6 @@ if (Elixir.js.vendor) {
 }
 
 
-// If the user called `Elixir.sass()` or `Elixir.less()`, we'll 
-// keep things traditional, and enable the necessary plugin to 
-// extract the CSS to its own, dedicated file. 
 if (Elixir.cssPreprocessor) {
     module.exports.plugins.push(
         new plugins.ExtractTextPlugin(
@@ -252,8 +244,6 @@ if (Elixir.cssPreprocessor) {
 }
 
 
-// Certain plugins are only appropriate during production. If 
-// NODE_ENV=production, we'll optimize the bundle as such.
 if (Elixir.inProduction) {
     module.exports.plugins = module.exports.plugins.concat([
         new webpack.DefinePlugin({

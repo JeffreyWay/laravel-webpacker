@@ -17,8 +17,8 @@ module.exports.plugins = {
 /**
  * Register the Webpack entry/output paths.
  * 
- * @param  {mixed}   entry  
- * @param  {string}  output
+ * @param {mixed}  entry  
+ * @param {string} output
  */
 module.exports.js = (entry, output) => {
     Elixir.js = {
@@ -32,10 +32,10 @@ module.exports.js = (entry, output) => {
 
 
 /**
- * Libraries to extract to their own vendor.js lib.
+ * Register vendor libs that should be extracted.
  * This helps drastically with long-term caching.
  * 
- * @param  {array}  libs 
+ * @param {array} libs 
  */
 module.exports.extract = (libs = []) => {
     Elixir.js.vendor = libs;
@@ -45,8 +45,8 @@ module.exports.extract = (libs = []) => {
 /**
  * Register Sass compilation.
  * 
- * @param  {string}  src  
- * @param  {string}  output 
+ * @param {string} src  
+ * @param {string} output 
  */
 module.exports.sass = (src, output) => {
     Elixir.sass = {
@@ -63,8 +63,8 @@ module.exports.sass = (src, output) => {
 /**
  * Register Less compilation.
  * 
- * @param  {string}  src  
- * @param  {string}  output 
+ * @param {string} src  
+ * @param {string} output 
  */
 module.exports.less = (src, output) => {
     Elixir.less = {
@@ -81,8 +81,8 @@ module.exports.less = (src, output) => {
 /**
  * Combine a collection of files.
  * 
- * @param  {string|array}  src  
- * @param  {string}        output 
+ * @param {string|array} src  
+ * @param {string}       output 
  */
 module.exports.combine = (src, output) => {
     Elixir.combine = (Elixir.combine || []).concat({ src, output });
@@ -94,8 +94,8 @@ module.exports.combine = (src, output) => {
 /**
  * Copy one or more files to a new location.
  * 
- * @param  {string}  from
- * @param  {string}  to
+ * @param {string} from
+ * @param {string} to
  */
 module.exports.copy = (from, to) => {
     Elixir.copy = (Elixir.copy || []).concat({ 
@@ -110,7 +110,7 @@ module.exports.copy = (from, to) => {
 /**
  * Minify the provided file.
  * 
- * @param  {string|array}  src  
+ * @param {string|array} src  
  */
 module.exports.minify = (src) => {
     Elixir.minify = (Elixir.minify || []).concat(src);
@@ -123,7 +123,7 @@ module.exports.minify = (src) => {
  * Enable sourcemap support.
  */
 module.exports.sourceMaps = () => {
-    Elixir.sourcemaps = (Elixir.inProduction ? '#eval-source-map' : '#source-map');
+    Elixir.sourcemaps = (Elixir.inProduction ? '#source-map' : '#eval-source-map');
 
     return this;
 };
@@ -146,7 +146,7 @@ module.exports.version = (options = {}) => {
 
 
 /**
- * Disable OS notifications.
+ * Disable all OS notifications.
  */
 module.exports.disableNotifications = () => {
     Elixir.notifications = false;

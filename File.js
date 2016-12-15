@@ -50,7 +50,7 @@ module.exports = class {
     /**
      * Write the given contents to the file.
      * 
-     * @param  {string}  body
+     * @param {string} body
      */
     write(body) {
         fs.writeFileSync(this.file, body);
