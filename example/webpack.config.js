@@ -67,7 +67,7 @@ module.exports.module = {
         },
 
         {
-            test: /\.(png|jpg|gif|svg|woff2?|ttf|eot|svg)$/,
+            test: /\.(png|jpe?g|gif|svg|woff2?|ttf|eot|svg)$/,
             loader: 'file-loader',
             options: {
                 name: '[name].[ext]?[hash]'
@@ -129,7 +129,9 @@ module.exports.resolve = {
  */
 
 module.exports.stats = {
-    hash: false
+    hash: false,
+    version: false,
+    timings: false
 };
 
 
