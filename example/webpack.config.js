@@ -28,7 +28,9 @@ module.exports.entry = Elixir.entry();
  |
  */
 
-module.exports.stats = 'none';
+module.exports.stats = {
+    hash: false
+};
 
 
 /*
