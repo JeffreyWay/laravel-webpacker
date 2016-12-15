@@ -32,6 +32,14 @@ module.exports = class {
 
 
     /**
+     * Determine if the file exists.
+     */
+    static exists(file) {
+        return fs.existsSync(file);
+    }
+
+
+    /**
      * Read the file.
      */
     read() {
@@ -46,6 +54,16 @@ module.exports = class {
      */
     write(body) {
         fs.writeFileSync(this.file, body);
+    }
+
+
+    /**
+     * Delete/Unlink the current file.
+     */
+    delete() {
+       if (fs.existsSync(this.file)) {
+            fs.unlinkSync(this.file);
+        }     
     }
 
 

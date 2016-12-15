@@ -1,6 +1,7 @@
-let concatenate = require('concatenate');
 let path = require('path');
 let File = require('./File');
+let Versioning = require('./Versioning');
+let concatenate = require('concatenate');
 
 module.exports = {
     /**
@@ -26,7 +27,7 @@ module.exports = {
     /**
      * Should the bundled JS/CSS be versioned?
      */
-    hash: false,
+    versioning: new Versioning(),
 
 
     /**
@@ -54,9 +55,9 @@ module.exports = {
         let filename;
 
         if (this.js.vendor) {
-            filename = this.hash ? '[name].[chunkhash].js' : '[name].js';
+            filename = this.versioning.enabled ? '[name].[chunkhash].js' : '[name].js';
         } else {
-            filename = this.hash ? this.js.output.hashedFile : this.js.output.file;
+            filename = this.versioning.enabled ? this.js.output.hashedFile : this.js.output.file;
         }
 
         return {

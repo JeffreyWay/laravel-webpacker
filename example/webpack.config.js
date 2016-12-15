@@ -20,6 +20,7 @@ if (Elixir.js.vendor) {
     module.exports.entry.vendor = Elixir.js.vendor;
 }
 
+
 /*
  |--------------------------------------------------------------------------
  | Webpack Output
@@ -182,12 +183,32 @@ if (Elixir.notifications) {
 }
 
 
+// If versioning is enabled, we'll immediately read the 
+// assets.json file, and record the list of files.
+if (Elixir.versioning.enabled) {
+    module.exports.plugins.push(
+        new plugins.AssetsPlugin({
+            filename: Elixir.versioning.manifestPath,
+            prettyPrint: true
+        })
+    );
+
+    Elixir.versioning.record();
+}
+
+
 // We need to register a hook for when Webpack is finished with
 // its build. That way, we can perform various non-Webpack
 // specific tasks, such as conctenation/minification.
 module.exports.plugins.push(
     new plugins.WebpackOnBuildPlugin(stats => {
         Elixir.concatenateAll().minifyAll();
+
+        // Delete all old versioned files, which have now 
+        // been replaced with new hashes.
+        if (Elixir.versioning.enabled) {
+            Elixir.versioning.prune(Elixir.js.output.base);
+        }
     })
 );
 
@@ -202,20 +223,6 @@ if (Elixir.copy) {
         );
     });
 }
-
-
-// We'll write the build stats to a file, just in case. In particular, 
-// your server-side code may read this file to detect the cached 
-// file name.
-module.exports.plugins.push(
-    function() {
-        this.plugin('done', stats => {
-            new Elixir.File(
-                path.join(__dirname, 'storage/logs/stats.json')
-            ).write(JSON.stringify(stats.toJson()));
-        });
-    }
-);
 
 
 // Grouping application code with vendor libraries is 
@@ -238,7 +245,7 @@ if (Elixir.cssPreprocessor) {
         new plugins.ExtractTextPlugin(
             path.relative(
                 Elixir.js.output.base, 
-                Elixir[Elixir.cssPreprocessor].output[Elixir.hash ? 'hashedPath' : 'path']
+                Elixir[Elixir.cssPreprocessor].output[Elixir.versioning.enabled ? 'hashedPath' : 'path']
             )
         )
     );

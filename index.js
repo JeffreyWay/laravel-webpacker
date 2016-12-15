@@ -9,7 +9,8 @@ module.exports.plugins = {
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
     ExtractTextPlugin: require('extract-text-webpack-plugin'),
-    CopyWebpackPlugin: require('copy-webpack-plugin')
+    CopyWebpackPlugin: require('copy-webpack-plugin'),
+    AssetsPlugin: require('assets-webpack-plugin')
 }
 
 
@@ -130,9 +131,15 @@ module.exports.sourceMaps = () => {
 
 /**
  * Enable compiled file versioning.
+ *
+ * @param {object} options
  */
-module.exports.version = () => {
-    Elixir.hash = true;
+module.exports.version = (options = {}) => {
+    Elixir.versioning.enabled = true;
+
+    if (options.manifestPath) {
+        Elixir.versioning.manifestPath = options.manifestPath;
+    }
 
     return this;
 };
