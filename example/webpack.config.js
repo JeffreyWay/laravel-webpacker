@@ -53,7 +53,7 @@ module.exports.module = {
                 loaders: {
                     js: 'babel-loader?cacheDirectory=true'
                   },
-                  // Add any PostCSS plugins you want here.
+                  
                   postcss: [
                     require('autoprefixer')
                 ]
