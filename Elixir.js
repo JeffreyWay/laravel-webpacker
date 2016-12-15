@@ -54,7 +54,7 @@ module.exports = {
         let filename;
 
         if (this.js.vendor) {
-            filename = this.hash ? '[chunkhash].[name].js' : '[name].js';
+            filename = this.hash ? '[name].[chunkhash].js' : '[name].js';
         } else {
             filename = this.hash ? this.js.output.hashedFile : this.js.output.file;
         }
