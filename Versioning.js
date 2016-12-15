@@ -2,52 +2,52 @@ let path = require('path');
 let File = require('./File');
 
 class Versioning {
-	/**
-	 * Create a new Versioning instance.
-	 *
-	 * @param {string|null} manifestPath
-	 */
-	constructor(manifestPath = null) {
-		this.enabled = false;
-		this.manifestPath = manifestPath || './storage/framework/cache/elixir.json';
+    /**
+     * Create a new Versioning instance.
+     *
+     * @param {string|null} manifestPath
+     */
+    constructor(manifestPath = null) {
+        this.enabled = false;
+        this.manifestPath = manifestPath || './storage/framework/cache/elixir.json';
 
-		this.files = [];
-	}
-
-
-	/**
-	 * Enable Webpack versioning.
-	 */
-	enable() {
-		this.enabled = true;
-
-		return this;
-	}
+        this.files = [];
+    }
 
 
-	/**
-	 * Determine if the manifest file exists.
-	 */
-	hasManifest() {
-		return File.exists(this.manifestPath);
-	}
+    /**
+     * Enable Webpack versioning.
+     */
+    enable() {
+        this.enabled = true;
+
+        return this;
+    }
 
 
-	/**
-	 * Retrieve the JSON output from the manifest file.
-	 */
-	readManifest() {
-		return JSON.parse(
+    /**
+     * Determine if the manifest file exists.
+     */
+    hasManifest() {
+        return File.exists(this.manifestPath);
+    }
+
+
+    /**
+     * Retrieve the JSON output from the manifest file.
+     */
+    readManifest() {
+        return JSON.parse(
             new File(this.manifestPath).read()
         );
-	}
+    }
 
 
-	/**
-	 * Record versioned files.
-	 */
-	record() {
-		if (! this.hasManifest()) return;
+    /**
+     * Record versioned files.
+     */
+    record() {
+        if (! this.hasManifest()) return;
 
         this.reset();
 
@@ -58,42 +58,42 @@ class Versioning {
         });
 
         return this;
-	}
+    }
 
 
-	/**
-	 * Reset all recorded files.
-	 */
-	reset() {
-		this.files = [];
+    /**
+     * Reset all recorded files.
+     */
+    reset() {
+        this.files = [];
 
-		return this;
-	}
+        return this;
+    }
 
 
-	/**
-	 * Record any newly versioned files, and then delete
-	 * the old ones, that are no longer needed.
-	 * 
-	 * @param  {string}  baseDir 
-	 */
-	prune(baseDir) {
-		let updatedVersions = new Versioning(this.manifestPath).enable().record();
+    /**
+     * Record any newly versioned files, and then delete
+     * the old ones, that are no longer needed.
+     * 
+     * @param  {string}  baseDir 
+     */
+    prune(baseDir) {
+        let updatedVersions = new Versioning(this.manifestPath).enable().record();
 
-		if (! updatedVersions) return;
+        if (! updatedVersions) return;
 
         this.files.forEach(file => {
-        	// If the updated file is exactly the same as the old
-        	// one, then nothing has changed. Don't delete it.
-        	if (! updatedVersions.files.includes(file)) {
-	        	new File(path.resolve(baseDir, file)).delete();
-        	}
+            // If the updated file is exactly the same as the old
+            // one, then nothing has changed. Don't delete it.
+            if (! updatedVersions.files.includes(file)) {
+                new File(path.resolve(baseDir, file)).delete();
+            }
         });
 
         this.files = updatedVersions.files;
 
         return this;
-	}
+    }
 }
 
 module.exports = Versioning;
