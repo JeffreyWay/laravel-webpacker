@@ -21,7 +21,7 @@ module.exports.plugins = {
  */
 module.exports.js = (entry, output) => {
     Elixir.js = {
-        entry,
+        entry: path.resolve(entry),
         output: new Elixir.File(output).parsePath(),
         vendor: false
     };
@@ -49,7 +49,7 @@ module.exports.extract = (libs = []) => {
  */
 module.exports.sass = (src, output) => {
     Elixir.sass = {
-        src,
+        src: path.resolve(src),
         output: new Elixir.File(output).parsePath()
     };
 
@@ -67,7 +67,7 @@ module.exports.sass = (src, output) => {
  */
 module.exports.less = (src, output) => {
     Elixir.less = {
-        src,
+        src: path.resolve(src),
         output: new Elixir.File(output).parsePath()
     };
 
