@@ -64,6 +64,14 @@ module.exports.module = {
             test: /\.js$/,
             loader: 'babel-loader?cacheDirectory=true',
             exclude: /(node_modules|bower_components)/
+        },
+
+        {
+            test: /\.(png|jpg|gif|svg|woff2?|ttf|eot|svg)$/,
+            loader: 'file-loader',
+            options: {
+                name: '[name].[ext]?[hash]'
+            }
         }
     ]
 };
@@ -74,7 +82,7 @@ if (Elixir.sass) {
         test: /\.s[ac]ss$/,
         loader: plugins.ExtractTextPlugin.extract({
             fallbackLoader: 'style-loader',
-            loader: ['css-loader', 'postcss-loader', 'sass-loader']
+            loader: ['css-loader', 'postcss-loader', 'resolve-url-loader', 'sass-loader?sourceMap']
         })
     });
 }
