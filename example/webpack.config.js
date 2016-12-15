@@ -151,6 +151,8 @@ module.exports.stats = {
     timings: false
 };
 
+module.exports.performance = { hints: Elixir.inProduction };
+
 
 /*
  |--------------------------------------------------------------------------
