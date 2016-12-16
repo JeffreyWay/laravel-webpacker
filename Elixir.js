@@ -62,7 +62,8 @@ module.exports = {
 
         return {
             path: path.resolve(__dirname, '../../', this.js.output.base),
-            filename
+            filename,
+            publicPath: this.inProduction ? './' : "http://localhost:8080/js" // Necessary for HMR.
         };
     },
     

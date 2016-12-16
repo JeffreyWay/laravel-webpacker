@@ -170,6 +170,22 @@ module.exports.devtool = Elixir.sourcemaps;
 
 /*
  |--------------------------------------------------------------------------
+ | Webpack Dev Server Configuration
+ |--------------------------------------------------------------------------
+ |
+ | If you want to use that flashy hot module replacement feature, then
+ | we've got you covered. Here, we'll set some basic initial config
+ | for the Node server. You very likely won't want to edit this.
+ |
+ */
+module.exports.devServer = {
+    historyApiFallback: true,
+    noInfo: true
+};
+
+
+/*
+ |--------------------------------------------------------------------------
  | Plugins
  |--------------------------------------------------------------------------
  |
