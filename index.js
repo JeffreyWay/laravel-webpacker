@@ -39,7 +39,7 @@ module.exports.js = (entry, output) => {
  * 
  * @param {array} libs 
  */
-module.exports.extract = (libs = []) => {
+module.exports.extract = (libs) => {
     Elixir.js.vendor = libs;
 
     return this;
