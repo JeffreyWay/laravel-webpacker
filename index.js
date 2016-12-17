@@ -156,4 +156,19 @@ module.exports.disableNotifications = () => {
 };
 
 
+/**
+ * Construct the user's desired Webpack configuration.
+ * 
+ * @param {function} mixins 
+ */
+module.exports.mix = (mixins) => {
+    mixins(module.exports);
+
+    // Since the user might wish to override the default cache 
+    // path, we'll update these here with the latest values.
+    Elixir.manifest.path = Elixir.cachePath + '/elixir.json';
+    Elixir.versioning.manifest = Elixir.manifest;
+};
+
+
 module.exports.config = Elixir;
