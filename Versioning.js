@@ -1,15 +1,15 @@
 let path = require('path');
-let File = require('./File');
+let Manifest = require('./Manifest');
 
 class Versioning {
     /**
      * Create a new Versioning instance.
      *
-     * @param {string|null} manifestPath
+     * @param {object} manifest
      */
-    constructor(manifestPath = null) {
+    constructor(manifest) {
         this.enabled = false;
-        this.manifestPath = manifestPath || './storage/framework/cache/elixir.json';
+        this.manifest = manifest;
 
         this.files = [];
     }
@@ -26,35 +26,17 @@ class Versioning {
 
 
     /**
-     * Determine if the manifest file exists.
-     */
-    hasManifest() {
-        return File.exists(this.manifestPath);
-    }
-
-
-    /**
-     * Retrieve the JSON output from the manifest file.
-     */
-    readManifest() {
-        return JSON.parse(
-            new File(this.manifestPath).read()
-        );
-    }
-
-
-    /**
      * Record versioned files.
      */
     record() {
-        if (! this.hasManifest()) return;
+        if (! this.manifest.exists()) return;
 
         this.reset();
 
-        let json = this.readManifest();
+        let json = this.manifest.read().assetsByChunkName;
 
         Object.keys(json).forEach(entry => {
-            this.files = this.files.concat(Object.values(json[entry]));
+            this.files = this.files.concat(json[entry]);
         });
 
         return this;
@@ -78,7 +60,7 @@ class Versioning {
      * @param {string} baseDir 
      */
     prune(baseDir) {
-        let updatedVersions = new Versioning(this.manifestPath).enable().record();
+        let updatedVersions = new Versioning(this.manifest).enable().record();
 
         if (! updatedVersions) return;
 
@@ -86,7 +68,7 @@ class Versioning {
             // If the updated file is exactly the same as the old
             // one, then nothing has changed. Don't delete it.
             if (! updatedVersions.files.includes(file)) {
-                new File(path.resolve(baseDir, file)).delete();
+                this.manifest.remove(path.resolve(baseDir, file));
             }
         });
 

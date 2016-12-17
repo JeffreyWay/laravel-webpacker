@@ -2,6 +2,9 @@ let path = require('path');
 let Elixir = require('./Elixir');
 
 
+Elixir.init();
+
+
 /**
  * We'll fetch some Webpack config plugins here for cleanliness.
  */
@@ -9,8 +12,7 @@ module.exports.plugins = {
     WebpackNotifierPlugin: require('webpack-notifier'),
     WebpackOnBuildPlugin: require('on-build-webpack'),
     ExtractTextPlugin: require('extract-text-webpack-plugin'),
-    CopyWebpackPlugin: require('copy-webpack-plugin'),
-    AssetsPlugin: require('assets-webpack-plugin')
+    CopyWebpackPlugin: require('copy-webpack-plugin')
 }
 
 
@@ -139,8 +141,8 @@ module.exports.sourceMaps = () => {
 module.exports.version = (options = {}) => {
     Elixir.versioning.enabled = true;
 
-    if (options.manifestPath) {
-        Elixir.versioning.manifestPath = options.manifestPath;
+    if (options.manifest) {
+        Elixir.versioning.manifest = options.manifest;
     }
 
     return this;

@@ -1,7 +1,10 @@
 let path = require('path');
 let File = require('./File');
 let Versioning = require('./Versioning');
+let Manifest = require('./Manifest');
 let concatenate = require('concatenate');
+
+let cachePath = 'storage/framework/cache';
 
 module.exports = {
     /**
@@ -11,9 +14,27 @@ module.exports = {
 
 
     /**
+     * Where should we store temporary cache?
+     */
+    cachePath: cachePath,
+
+
+    /**
+     * The path to the app's public directory.
+     */
+    publicPath: './public',
+
+
+    /**
      * Should we apply sourcemaps when bundling?
      */
     sourcemaps: false,
+
+
+    /**
+     * Is hot module replacement enabled?
+     */
+    hmr: false,
 
 
     /**
@@ -27,13 +48,38 @@ module.exports = {
     /**
      * Versioning configuration, if enabled.
      */
-    versioning: new Versioning(),
+    versioning: new Versioning(new Manifest(cachePath + '/elixir.json')),
+
+
+    /**
+     * The manifest file, which Laravel uses to calculate file names
+     */
+    manifest: new Manifest(cachePath + '/elixir.json'),
 
 
     /**
      * Should we display notifications?
      */
     notifications: true,
+
+
+    /**
+     * Initialize the Elixir instance. 
+     */
+    init() {
+        let file = new this.File(this.cachePath + '/hot');
+
+        file.delete();
+
+        // If the user wants hot module replacement, we'll create 
+        // a temporary file, so that Laravel can detect it, and
+        // reference the proper base URL for any assets.
+        if (process.argv.includes('--hot')) {
+            this.hmr = true;
+
+            file.write('hot reloading enabled');
+        }
+    },
 
 
     /**
@@ -55,15 +101,15 @@ module.exports = {
         let filename;
 
         if (this.js.vendor) {
-            filename = this.versioning.enabled ? '[name].[chunkhash].js' : '[name].js';
+            filename = this.versioning.enabled ? '[name].[hash].js' : '[name].js';
         } else {
             filename = this.versioning.enabled ? this.js.output.hashedFile : this.js.output.file;
         }
 
         return {
-            path: path.resolve(__dirname, '../../', this.js.output.base),
-            filename,
-            publicPath: this.inProduction ? './' : "http://localhost:8080/js" // Necessary for HMR.
+            path: this.hmr ? '/' : this.publicPath,
+            filename: 'js/' + filename,
+            publicPath: this.hmr ? 'http://localhost:8080/' : './'
         };
     },
     

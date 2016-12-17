@@ -22,6 +22,7 @@ if (Elixir.js.vendor) {
 }
 
 
+
 /*
  |--------------------------------------------------------------------------
  | Webpack Output
@@ -34,6 +35,7 @@ if (Elixir.js.vendor) {
  */
 
 module.exports.output = Elixir.output();
+
 
 
 /*
@@ -81,7 +83,7 @@ module.exports.module = {
             test: /\.(woff2?|ttf|eot)$/,
             loader: 'file-loader',
             options: {
-                name: path.relative(__dirname, '../fonts/[name].[ext]?[hash]')
+                name: path.relative(__dirname, './fonts/[name].[ext]?[hash]')
             }
         }
     ]
@@ -116,6 +118,7 @@ if (Elixir.less) {
 }
 
 
+
 /*
  |--------------------------------------------------------------------------
  | Resolve
@@ -132,6 +135,7 @@ module.exports.resolve = {
         'vue$': 'vue/dist/vue.common.js'
     }
 };
+
 
 
 /*
@@ -154,6 +158,7 @@ module.exports.stats = {
 module.exports.performance = { hints: Elixir.inProduction };
 
 
+
 /*
  |--------------------------------------------------------------------------
  | Devtool
@@ -166,6 +171,7 @@ module.exports.performance = { hints: Elixir.inProduction };
  */
 
 module.exports.devtool = Elixir.sourcemaps;
+
 
 
 /*
@@ -182,6 +188,7 @@ module.exports.devServer = {
     historyApiFallback: true,
     noInfo: true
 };
+
 
 
 /*
@@ -209,25 +216,27 @@ if (Elixir.notifications) {
 }
 
 
+module.exports.plugins.push(
+    function() {
+        this.plugin('done', stats => Elixir.manifest.write(stats));
+    }
+);
+
+
 if (Elixir.versioning.enabled) {
+    Elixir.versioning.record();
+
     module.exports.plugins.push(
-        new plugins.AssetsPlugin({
-            filename: Elixir.versioning.manifestPath,
-            prettyPrint: true
+        new plugins.WebpackOnBuildPlugin(stats => {
+            Elixir.versioning.prune(Elixir.publicPath);
         })
     );
-
-    Elixir.versioning.record();
 }
 
 
 module.exports.plugins.push(
     new plugins.WebpackOnBuildPlugin(stats => {
         Elixir.concatenateAll().minifyAll();
-
-        if (Elixir.versioning.enabled) {
-            Elixir.versioning.prune(Elixir.js.output.base);
-        }
     })
 );
 
@@ -251,13 +260,12 @@ if (Elixir.js.vendor) {
 
 
 if (Elixir.cssPreprocessor) {
+    let pathToCss = Elixir[Elixir.cssPreprocessor].output[Elixir.versioning.enabled ? 'hashedPath' : 'path'];
+
     module.exports.plugins.push(
-        new plugins.ExtractTextPlugin(
-            path.relative(
-                Elixir.js.output.base, 
-                Elixir[Elixir.cssPreprocessor].output[Elixir.versioning.enabled ? 'hashedPath' : 'path']
-            )
-        )
+        new plugins.ExtractTextPlugin({
+            filename: pathToCss.replace('public/', '')
+        })
     );
 }
 
