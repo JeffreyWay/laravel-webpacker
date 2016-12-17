@@ -2,9 +2,6 @@ let path = require('path');
 let Elixir = require('./Elixir');
 
 
-Elixir.init();
-
-
 /**
  * We'll fetch some Webpack config plugins here for cleanliness.
  */

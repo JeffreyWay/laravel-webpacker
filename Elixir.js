@@ -1,85 +1,28 @@
 let path = require('path');
 let File = require('./File');
-let Versioning = require('./Versioning');
 let Manifest = require('./Manifest');
+let Versioning = require('./Versioning');
 let concatenate = require('concatenate');
 
-let cachePath = 'storage/framework/cache';
-
-module.exports = {
+module.exports = new class {
     /**
-     * Determine the current environment.
+     * Create a new Elixir instance. 
      */
-    inProduction: process.env.NODE_ENV === 'production',
+    constructor() {
+        this.inProduction = process.env.NODE_ENV === 'production';
+        this.publicPath = './public';
+        this.cachePath = 'storage/framework/cache';
+        this.hmr = false;
+        this.sourcemaps = false;
+        this.cssPreprocessor = false;
+        this.notifications = true;
+        this.File = File;
 
+        this.manifest = new Manifest(this.cachePath + '/elixir.json');
+        this.versioning = new Versioning(this.manifest);
 
-    /**
-     * Where should we store temporary cache?
-     */
-    cachePath: cachePath,
-
-
-    /**
-     * The path to the app's public directory.
-     */
-    publicPath: './public',
-
-
-    /**
-     * Should we apply sourcemaps when bundling?
-     */
-    sourcemaps: false,
-
-
-    /**
-     * Is hot module replacement enabled?
-     */
-    hmr: false,
-
-
-    /**
-     * Which CSS preprocessor, if any, are we using.
-     *
-     * Options: sass, less
-     */
-    cssPreprocessor: false,
-
-
-    /**
-     * Versioning configuration, if enabled.
-     */
-    versioning: new Versioning(new Manifest(cachePath + '/elixir.json')),
-
-
-    /**
-     * The manifest file, which Laravel uses to calculate file names
-     */
-    manifest: new Manifest(cachePath + '/elixir.json'),
-
-
-    /**
-     * Should we display notifications?
-     */
-    notifications: true,
-
-
-    /**
-     * Initialize the Elixir instance. 
-     */
-    init() {
-        let file = new this.File(this.cachePath + '/hot');
-
-        file.delete();
-
-        // If the user wants hot module replacement, we'll create 
-        // a temporary file, so that Laravel can detect it, and
-        // reference the proper base URL for any assets.
-        if (process.argv.includes('--hot')) {
-            this.hmr = true;
-
-            file.write('hot reloading enabled');
-        }
-    },
+        this.detectHotReloading();
+    }
 
 
     /**
@@ -91,7 +34,7 @@ module.exports = {
         }
 
         return this.js.entry;
-    },
+    }
 
 
     /**
@@ -111,7 +54,7 @@ module.exports = {
             filename: 'js/' + filename,
             publicPath: this.hmr ? 'http://localhost:8080/' : './'
         };
-    },
+    }
     
 
     /**
@@ -127,7 +70,7 @@ module.exports = {
         files.forEach(file => new File(file).minify());
 
         return this;
-    },
+    }
 
     
     /**
@@ -147,11 +90,24 @@ module.exports = {
         });
 
         return this;
-    },
+    }
 
 
     /**
-     * File can handle various read/write operations.
+     * Detect if the user desires hot reloading.
      */
-    File: File
+    detectHotReloading() {
+        let file = new this.File(this.cachePath + '/hot');
+
+        file.delete();
+
+        // If the user wants hot module replacement, we'll create 
+        // a temporary file, so that Laravel can detect it, and
+        // reference the proper base URL for any assets.
+        if (process.argv.includes('--hot')) {
+            this.hmr = true;
+
+            file.write('hot reloading enabled');
+        }
+    }
 };
