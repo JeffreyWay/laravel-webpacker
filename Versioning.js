@@ -59,20 +59,20 @@ class Versioning {
      * @param {string} baseDir 
      */
     prune(baseDir) {
-        let updatedVersions = new Versioning(this.manifest).enable().record();
+        let updated = new Versioning(this.manifest).enable().record();
 
-        if (! updatedVersions) return;
+        if (! updated) return;
 
         this.files.forEach(file => {
             // If the updated file is exactly the same as the old
             // one, then nothing has changed. Don't delete it.
-            if (! updatedVersions.files.includes(file)) {
+            if (! updated.files.includes(file)) {
                 this.manifest.remove(path.resolve(baseDir, file));
             }
         });
 
         // Lastly, we'll replace the versioned file list with the new one.
-        this.files = updatedVersions.files;
+        this.files = updated.files;
 
         return this;
     }
