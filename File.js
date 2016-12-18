@@ -20,7 +20,7 @@ module.exports = class {
      */
     minify() {
         if (this.fileType === '.js') {
-            this.write(uglify.minify(this.file));
+            this.write(uglify.minify(this.file).code);
         }
 
         if (this.fileType === '.css') {
