@@ -172,6 +172,7 @@ module.exports.mix = (mixins) => {
 
     // Since the user might wish to override the default cache 
     // path, we'll update these here with the latest values.
+    Elixir.cachePath = Elixir.js.output.base;
     Elixir.manifest.path = Elixir.cachePath + '/elixir.json';
     Elixir.versioning.manifest = Elixir.manifest;
 };

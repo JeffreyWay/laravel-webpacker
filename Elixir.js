@@ -10,14 +10,13 @@ module.exports = new class {
      */
     constructor() {
         this.inProduction = process.env.NODE_ENV === 'production';
-        this.publicPath = './public';
-        this.cachePath = 'storage/framework/cache';
+        this.File = File;
+        this.publicPath = this.File.exists('./artisan') ? 'public' : './';
         this.hmr = false;
         this.sourcemaps = false;
         this.cssPreprocessor = false;
         this.notifications = true;
-        this.File = File;
-
+        
         this.manifest = new Manifest(this.cachePath + '/elixir.json');
         this.versioning = new Versioning(this.manifest);
 
@@ -51,7 +50,7 @@ module.exports = new class {
 
         return {
             path: this.hmr ? '/' : this.publicPath,
-            filename: 'js/' + filename,
+            filename: path.join(this.js.output.base, filename).replace(this.publicPath, ''),
             publicPath: this.hmr ? 'http://localhost:8080/' : './'
         };
     }
