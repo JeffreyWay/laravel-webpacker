@@ -210,7 +210,7 @@ if (Elixir.notifications) {
         new plugins.WebpackNotifierPlugin({
             title: 'Laravel Elixir',
             alwaysNotify: true,
-            contentImage: path.join(__dirname, 'node_modules/laravel-webpacker/icons/laravel.png')
+            contentImage: 'node_modules/laravel-webpacker/icons/laravel.png'
         })
     );
 }
@@ -234,11 +234,13 @@ if (Elixir.versioning.enabled) {
 }
 
 
-module.exports.plugins.push(
-    new plugins.WebpackOnBuildPlugin(stats => {
-        Elixir.concatenateAll().minifyAll();
-    })
-);
+if (Elixir.combine || Elixir.minify) {
+    module.exports.plugins.push(
+        new plugins.WebpackOnBuildPlugin(stats => {
+            Elixir.concatenateAll().minifyAll();
+        })
+    );
+}
 
 
 if (Elixir.copy) {
@@ -260,11 +262,13 @@ if (Elixir.js.vendor) {
 
 
 if (Elixir.cssPreprocessor) {
-    let pathToCss = Elixir[Elixir.cssPreprocessor].output[Elixir.versioning.enabled ? 'hashedPath' : 'path'];
+    let cssOutputPath = Elixir[Elixir.cssPreprocessor].output[
+        Elixir.versioning.enabled ? 'hashedPath' : 'path'
+    ];
 
     module.exports.plugins.push(
         new plugins.ExtractTextPlugin({
-            filename: pathToCss.replace('public/', '')
+            filename: cssOutputPath.replace('public/', '')
         })
     );
 }

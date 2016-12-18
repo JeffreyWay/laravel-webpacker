@@ -54,8 +54,7 @@ class Versioning {
 
 
     /**
-     * Record any newly versioned files, and then delete
-     * the old ones that are no longer needed.
+     * Replace all old hashed files with the new versions.
      * 
      * @param {string} baseDir 
      */
