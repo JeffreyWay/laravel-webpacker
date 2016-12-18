@@ -1,6 +1,11 @@
 let File = require('./File');
 
 module.exports = class {
+    /**
+     * Create a new Manifest instance.
+     * 
+     * @param {string} path 
+     */
     constructor(path) {
         this.path = path;
     }
