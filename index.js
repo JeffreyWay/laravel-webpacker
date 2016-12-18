@@ -132,15 +132,9 @@ module.exports.sourceMaps = () => {
 
 /**
  * Enable compiled file versioning.
- *
- * @param {object} options
  */
-module.exports.version = (options = {}) => {
+module.exports.version = () => {
     Elixir.versioning.enabled = true;
-
-    if (options.manifest) {
-        Elixir.versioning.manifest = options.manifest;
-    }
 
     return this;
 };
@@ -151,6 +145,18 @@ module.exports.version = (options = {}) => {
  */
 module.exports.disableNotifications = () => {
     Elixir.notifications = false;
+
+    return this;
+};
+
+
+/**
+ * Set the temporary cache directory.
+ *
+ * @param {string} path
+ */
+module.exports.setCacheDirectory = (path) => {
+    Elixir.cachePath = path;
 
     return this;
 };

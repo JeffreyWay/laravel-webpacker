@@ -15,7 +15,8 @@ Elixir.mix(function (mix) {
 // Elixir.copy(from, to);
 // Elixir.minify(file);
 // Elixir.sourceMaps(); // Enable sourcemaps
-// Elixir.version({ manifest: './path.json' }); // Enable versioning.
+// Elixir.version(); // Enable versioning.
 // Elixir.disableNotifications();
+// Elixir.setCacheDirectory('some/folder');
 
 module.exports = Elixir;
