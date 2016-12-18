@@ -33,7 +33,7 @@ class Versioning {
 
         this.reset();
 
-        let json = this.manifest.read().assetsByChunkName;
+        let json = this.manifest.read();
 
         Object.keys(json).forEach(entry => {
             this.files = this.files.concat(json[entry]);

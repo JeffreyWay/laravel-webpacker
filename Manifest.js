@@ -25,7 +25,7 @@ module.exports = class {
     read() {
         return JSON.parse(
             new File(this.path).read()
-        );
+        ).assetsByChunkName;
     }   
 
 
