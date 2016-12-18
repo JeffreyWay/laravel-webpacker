@@ -2,8 +2,8 @@ let Elixir = require('laravel-webpacker');
 
 
 Elixir.mix(function (mix) {
-    mix.js('./resources/assets/js/app.js', './public/js/bundle.js')
-       .sass('./resources/assets/sass/app.scss', './public/css/complete.css');
+    mix.js('./src/app.js', './dist/app.js')
+       .sass('./src/app.scss', './dist/app.css');
 });
 
 // Full API
