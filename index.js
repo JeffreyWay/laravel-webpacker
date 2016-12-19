@@ -176,6 +176,8 @@ module.exports.mix = (mixins) => {
     Elixir.versioning.manifest = Elixir.manifest;
 
     Elixir.detectHotReloading();
+
+    return this;
 };
 
 

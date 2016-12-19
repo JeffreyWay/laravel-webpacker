@@ -1,9 +1,8 @@
 let Elixir = require('laravel-webpacker');
 
-
-Elixir.mix(function (mix) {
-    mix.js('./src/app.js', './dist/app.js')
-       .sass('./src/app.scss', './dist/app.css');
+module.exports = Elixir.mix(mix => {
+    mix.js('src/app.js', 'dist/app.js');
+       .sass('src/app.scss', 'dist/app.scss');
 });
 
 // Full API
@@ -18,5 +17,3 @@ Elixir.mix(function (mix) {
 // Elixir.version(); // Enable versioning.
 // Elixir.disableNotifications();
 // Elixir.setCacheDirectory('some/folder');
-
-module.exports = Elixir;
