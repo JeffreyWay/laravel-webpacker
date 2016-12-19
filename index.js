@@ -175,6 +175,8 @@ module.exports.mix = (mixins) => {
     Elixir.cachePath = Elixir.js.output.base;
     Elixir.manifest.path = Elixir.cachePath + '/elixir.json';
     Elixir.versioning.manifest = Elixir.manifest;
+
+    this.detectHotReloading();
 };
 
 

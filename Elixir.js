@@ -19,8 +19,6 @@ module.exports = new class {
         
         this.manifest = new Manifest(this.cachePath + '/elixir.json');
         this.versioning = new Versioning(this.manifest);
-
-        this.detectHotReloading();
     }
 
 
