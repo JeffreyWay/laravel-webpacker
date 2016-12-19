@@ -11,11 +11,13 @@ module.exports = new class {
     constructor() {
         this.inProduction = process.env.NODE_ENV === 'production';
         this.File = File;
-        this.publicPath = this.File.exists('./artisan') ? 'public' : './';
         this.hmr = false;
         this.sourcemaps = false;
         this.cssPreprocessor = false;
         this.notifications = true;
+        
+        this.publicPath = this.isUsingLaravel() ? 'public' : './';
+        this.cachePath = this.isUsingLaravel() ? 'storage/framework/cache' : './';
         
         this.manifest = new Manifest(this.cachePath + '/elixir.json');
         this.versioning = new Versioning(this.manifest);
@@ -106,5 +108,13 @@ module.exports = new class {
 
             file.write('hot reloading enabled');
         }
+    }
+
+
+    /**
+     * Determine if we are working with a Laravel project.
+     */
+    isUsingLaravel() {
+        return this.File.exists('./artisan');
     }
 };

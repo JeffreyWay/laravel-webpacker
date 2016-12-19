@@ -268,7 +268,7 @@ if (Elixir.cssPreprocessor) {
 
     module.exports.plugins.push(
         new plugins.ExtractTextPlugin({
-            filename: cssOutputPath.replace('public/', '')
+            filename: cssOutputPath.replace('public', '')
         })
     );
 }
