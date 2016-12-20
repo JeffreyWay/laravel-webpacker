@@ -1,5 +1,5 @@
 let path = require('path');
-let Elixir = require('./Elixir');
+let Alchemy.json = require('./Alchemy.json');
 
 
 /**
@@ -20,9 +20,9 @@ module.exports.plugins = {
  * @param {string} output
  */
 module.exports.js = (entry, output) => {
-    Elixir.js = {
+    Alchemy.json.js = {
         entry: path.resolve(entry),
-        output: new Elixir.File(output).parsePath(),
+        output: new Alchemy.json.File(output).parsePath(),
         vendor: false
     };
 
@@ -37,7 +37,7 @@ module.exports.js = (entry, output) => {
  * @param {array} libs 
  */
 module.exports.extract = (libs) => {
-    Elixir.js.vendor = libs;
+    Alchemy.json.js.vendor = libs;
 
     return this;
 }
@@ -50,12 +50,12 @@ module.exports.extract = (libs) => {
  * @param {string} output 
  */
 module.exports.sass = (src, output) => {
-    Elixir.sass = {
+    Alchemy.json.sass = {
         src: path.resolve(src),
-        output: new Elixir.File(output).parsePath()
+        output: new Alchemy.json.File(output).parsePath()
     };
 
-    Elixir.cssPreprocessor = 'sass';
+    Alchemy.json.cssPreprocessor = 'sass';
 
     return this;
 };
@@ -68,12 +68,12 @@ module.exports.sass = (src, output) => {
  * @param {string} output 
  */
 module.exports.less = (src, output) => {
-    Elixir.less = {
+    Alchemy.json.less = {
         src: path.resolve(src),
-        output: new Elixir.File(output).parsePath()
+        output: new Alchemy.json.File(output).parsePath()
     };
 
-    Elixir.cssPreprocessor = 'less';
+    Alchemy.json.cssPreprocessor = 'less';
 
     return this;
 };
@@ -86,7 +86,7 @@ module.exports.less = (src, output) => {
  * @param {string}       output 
  */
 module.exports.combine = (src, output) => {
-    Elixir.combine = (Elixir.combine || []).concat({ src, output });
+    Alchemy.json.combine = (Alchemy.json.combine || []).concat({ src, output });
 
     return this;
 };
@@ -99,7 +99,7 @@ module.exports.combine = (src, output) => {
  * @param {string} to
  */
 module.exports.copy = (from, to) => {
-    Elixir.copy = (Elixir.copy || []).concat({ 
+    Alchemy.json.copy = (Alchemy.json.copy || []).concat({ 
         from, 
         to: path.resolve(__dirname, '../../', to)
     });
@@ -114,7 +114,7 @@ module.exports.copy = (from, to) => {
  * @param {string|array} src  
  */
 module.exports.minify = (src) => {
-    Elixir.minify = (Elixir.minify || []).concat(src);
+    Alchemy.json.minify = (Alchemy.json.minify || []).concat(src);
 
     return this;
 };
@@ -124,7 +124,7 @@ module.exports.minify = (src) => {
  * Enable sourcemap support.
  */
 module.exports.sourceMaps = () => {
-    Elixir.sourcemaps = (Elixir.inProduction ? '#source-map' : '#eval-source-map');
+    Alchemy.json.sourcemaps = (Alchemy.json.inProduction ? '#source-map' : '#eval-source-map');
 
     return this;
 };
@@ -134,7 +134,7 @@ module.exports.sourceMaps = () => {
  * Enable compiled file versioning.
  */
 module.exports.version = () => {
-    Elixir.versioning.enabled = true;
+    Alchemy.json.versioning.enabled = true;
 
     return this;
 };
@@ -144,7 +144,7 @@ module.exports.version = () => {
  * Disable all OS notifications.
  */
 module.exports.disableNotifications = () => {
-    Elixir.notifications = false;
+    Alchemy.json.notifications = false;
 
     return this;
 };
@@ -156,7 +156,7 @@ module.exports.disableNotifications = () => {
  * @param {string} path
  */
 module.exports.setCacheDirectory = (path) => {
-    Elixir.cachePath = path;
+    Alchemy.json.cachePath = path;
 
     return this;
 };
@@ -172,13 +172,13 @@ module.exports.mix = (mixins) => {
 
     // Since the user might wish to override the default cache 
     // path, we'll update these here with the latest values.
-    Elixir.manifest.path = Elixir.cachePath + '/elixir.json';
-    Elixir.versioning.manifest = Elixir.manifest;
+    Alchemy.json.manifest.path = Alchemy.json.cachePath + '/Alchemy.json.json';
+    Alchemy.json.versioning.manifest = Alchemy.json.manifest;
 
-    Elixir.detectHotReloading();
+    Alchemy.json.detectHotReloading();
 
     return this;
 };
 
 
-module.exports.config = Elixir;
+module.exports.config = Alchemy.json;

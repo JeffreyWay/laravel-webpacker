@@ -1,7 +1,7 @@
 var path = require('path');
 var webpack = require('webpack');
-var Elixir = require('./webpack.elixir').config;
-var plugins = require('./webpack.elixir').plugins;
+var Alchemy = require('./webpack.alchemy').config;
+var plugins = require('./webpack.alchemy').plugins;
 
 
 /*
@@ -10,15 +10,15 @@ var plugins = require('./webpack.elixir').plugins;
  |--------------------------------------------------------------------------
  |
  | We'll first specify the entry point for Webpack. By default, we'll
- | assume a single bundled file, but you may call Elixir.extract()
+ | assume a single bundled file, but you may call Alchemy.extract()
  | to make a separate bundle specifically for vendor libraries.
  |
  */
 
-module.exports.entry = { app: Elixir.entry() };
+module.exports.entry = { app: Alchemy.entry() };
 
-if (Elixir.js.vendor) {
-    module.exports.entry.vendor = Elixir.js.vendor;
+if (Alchemy.js.vendor) {
+    module.exports.entry.vendor = Alchemy.js.vendor;
 }
 
 
@@ -29,12 +29,12 @@ if (Elixir.js.vendor) {
  |--------------------------------------------------------------------------
  |
  | Webpack naturally requires us to specify our desired output path and
- | file name. We'll simply echo what you passed to with Elixir.js().
- | Note that, for Elixir.version(), we'll properly hash the file.
+ | file name. We'll simply echo what you passed to with Alchemy.js().
+ | Note that, for Alchemy.version(), we'll properly hash the file.
  |
  */
 
-module.exports.output = Elixir.output();
+module.exports.output = Alchemy.output();
 
 
 
@@ -90,7 +90,7 @@ module.exports.module = {
 };
 
 
-if (Elixir.sass) {
+if (Alchemy.sass) {
     module.exports.module.rules.push({
         test: /\.s[ac]ss$/,
         loader: plugins.ExtractTextPlugin.extract({
@@ -104,7 +104,7 @@ if (Elixir.sass) {
 }
 
 
-if (Elixir.less) {
+if (Alchemy.less) {
     module.exports.module.rules.push({
         test: /\.less$/,
         loader: plugins.ExtractTextPlugin.extract({
@@ -155,7 +155,7 @@ module.exports.stats = {
     timings: false
 };
 
-module.exports.performance = { hints: Elixir.inProduction };
+module.exports.performance = { hints: Alchemy.inProduction };
 
 
 
@@ -166,11 +166,11 @@ module.exports.performance = { hints: Elixir.inProduction };
  |
  | Sourcemaps allow us to access our original source code within the
  | browser, even if we're serving a bundled script or stylesheet.
- | You may activate sourcemaps, by adding Elixir.sourceMaps().
+ | You may activate sourcemaps, by adding Alchemy.sourceMaps().
  |
  */
 
-module.exports.devtool = Elixir.sourcemaps;
+module.exports.devtool = Alchemy.sourcemaps;
 
 
 
@@ -205,10 +205,10 @@ module.exports.devServer = {
 module.exports.plugins = [];
 
 
-if (Elixir.notifications) {
+if (Alchemy.notifications) {
     module.exports.plugins.push(
         new plugins.WebpackNotifierPlugin({
-            title: 'Laravel Elixir',
+            title: 'Laravel Alchemy',
             alwaysNotify: true,
             contentImage: 'node_modules/laravel-webpacker/icons/laravel.png'
         })
@@ -218,33 +218,33 @@ if (Elixir.notifications) {
 
 module.exports.plugins.push(
     function() {
-        this.plugin('done', stats => Elixir.manifest.write(stats));
+        this.plugin('done', stats => Alchemy.manifest.write(stats));
     }
 );
 
 
-if (Elixir.versioning.enabled) {
-    Elixir.versioning.record();
+if (Alchemy.versioning.enabled) {
+    Alchemy.versioning.record();
 
     module.exports.plugins.push(
         new plugins.WebpackOnBuildPlugin(stats => {
-            Elixir.versioning.prune(Elixir.publicPath);
+            Alchemy.versioning.prune(Alchemy.publicPath);
         })
     );
 }
 
 
-if (Elixir.combine || Elixir.minify) {
+if (Alchemy.combine || Alchemy.minify) {
     module.exports.plugins.push(
         new plugins.WebpackOnBuildPlugin(stats => {
-            Elixir.concatenateAll().minifyAll();
+            Alchemy.concatenateAll().minifyAll();
         })
     );
 }
 
 
-if (Elixir.copy) {
-    Elixir.copy.forEach(copy => {
+if (Alchemy.copy) {
+    Alchemy.copy.forEach(copy => {
         module.exports.plugins.push(
             new plugins.CopyWebpackPlugin([copy])
         );
@@ -252,7 +252,7 @@ if (Elixir.copy) {
 }
 
 
-if (Elixir.js.vendor) {
+if (Alchemy.js.vendor) {
     module.exports.plugins.push(
         new webpack.optimize.CommonsChunkPlugin({
             names: ['vendor', 'manifest']
@@ -261,9 +261,9 @@ if (Elixir.js.vendor) {
 }
 
 
-if (Elixir.cssPreprocessor) {
-    let cssOutputPath = Elixir[Elixir.cssPreprocessor].output[
-        Elixir.versioning.enabled ? 'hashedPath' : 'path'
+if (Alchemy.cssPreprocessor) {
+    let cssOutputPath = Alchemy[Alchemy.cssPreprocessor].output[
+        Alchemy.versioning.enabled ? 'hashedPath' : 'path'
     ];
 
     module.exports.plugins.push(
@@ -274,7 +274,7 @@ if (Elixir.cssPreprocessor) {
 }
 
 
-if (Elixir.inProduction) {
+if (Alchemy.inProduction) {
     module.exports.plugins = module.exports.plugins.concat([
         new webpack.DefinePlugin({
             'process.env': {

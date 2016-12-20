@@ -6,7 +6,7 @@ let concatenate = require('concatenate');
 
 module.exports = new class {
     /**
-     * Create a new Elixir instance. 
+     * Create a new Alchemy instance. 
      */
     constructor() {
         this.inProduction = process.env.NODE_ENV === 'production';
@@ -19,7 +19,7 @@ module.exports = new class {
         this.publicPath = this.isUsingLaravel() ? 'public' : './';
         this.cachePath = this.isUsingLaravel() ? 'storage/framework/cache' : './';
         
-        this.manifest = new Manifest(this.cachePath + '/elixir.json');
+        this.manifest = new Manifest(this.cachePath + '/Alchemy.json');
         this.versioning = new Versioning(this.manifest);
     }
 
@@ -57,7 +57,7 @@ module.exports = new class {
     
 
     /**
-     * Minify the given files, or those from Elixir.minify().
+     * Minify the given files, or those from Alchemy.minify().
      * 
      * @param array|null files 
      */
@@ -73,7 +73,7 @@ module.exports = new class {
 
     
     /**
-     * Combine the given files, or those from Elixir.combine().
+     * Combine the given files, or those from Alchemy.combine().
      * 
      * @param array|null files 
      */
