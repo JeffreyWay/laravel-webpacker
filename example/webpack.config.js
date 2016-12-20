@@ -1,7 +1,23 @@
 var path = require('path');
 var webpack = require('webpack');
-var Alchemy = require('./webpack.alchemy').config;
-var plugins = require('./webpack.alchemy').plugins;
+var Mix = require('laravel-webpacker').config;
+var plugins = require('laravel-webpacker').plugins;
+
+
+/*
+ |--------------------------------------------------------------------------
+ | Mix Initialization
+ |--------------------------------------------------------------------------
+ |
+ | As our first step, we'll require the project's Laravel Mix file
+ | and record the user's requested compilation and build steps.
+ | Once those steps have been recorded, we may get to work.
+ |
+ */
+
+require('./webpack.mix');
+
+Mix.finalize();
 
 
 /*
@@ -10,15 +26,15 @@ var plugins = require('./webpack.alchemy').plugins;
  |--------------------------------------------------------------------------
  |
  | We'll first specify the entry point for Webpack. By default, we'll
- | assume a single bundled file, but you may call Alchemy.extract()
+ | assume a single bundled file, but you may call Mix.extract()
  | to make a separate bundle specifically for vendor libraries.
  |
  */
 
-module.exports.entry = { app: Alchemy.entry() };
+module.exports.entry = { app: Mix.entry() };
 
-if (Alchemy.js.vendor) {
-    module.exports.entry.vendor = Alchemy.js.vendor;
+if (Mix.js.vendor) {
+    module.exports.entry.vendor = Mix.js.vendor;
 }
 
 
@@ -29,12 +45,12 @@ if (Alchemy.js.vendor) {
  |--------------------------------------------------------------------------
  |
  | Webpack naturally requires us to specify our desired output path and
- | file name. We'll simply echo what you passed to with Alchemy.js().
- | Note that, for Alchemy.version(), we'll properly hash the file.
+ | file name. We'll simply echo what you passed to with Mix.js().
+ | Note that, for Mix.version(), we'll properly hash the file.
  |
  */
 
-module.exports.output = Alchemy.output();
+module.exports.output = Mix.output();
 
 
 
@@ -90,7 +106,7 @@ module.exports.module = {
 };
 
 
-if (Alchemy.sass) {
+if (Mix.sass) {
     module.exports.module.rules.push({
         test: /\.s[ac]ss$/,
         loader: plugins.ExtractTextPlugin.extract({
@@ -104,7 +120,7 @@ if (Alchemy.sass) {
 }
 
 
-if (Alchemy.less) {
+if (Mix.less) {
     module.exports.module.rules.push({
         test: /\.less$/,
         loader: plugins.ExtractTextPlugin.extract({
@@ -155,7 +171,7 @@ module.exports.stats = {
     timings: false
 };
 
-module.exports.performance = { hints: Alchemy.inProduction };
+module.exports.performance = { hints: Mix.inProduction };
 
 
 
@@ -166,11 +182,11 @@ module.exports.performance = { hints: Alchemy.inProduction };
  |
  | Sourcemaps allow us to access our original source code within the
  | browser, even if we're serving a bundled script or stylesheet.
- | You may activate sourcemaps, by adding Alchemy.sourceMaps().
+ | You may activate sourcemaps, by adding Mix.sourceMaps().
  |
  */
 
-module.exports.devtool = Alchemy.sourcemaps;
+module.exports.devtool = Mix.sourcemaps;
 
 
 
@@ -205,10 +221,10 @@ module.exports.devServer = {
 module.exports.plugins = [];
 
 
-if (Alchemy.notifications) {
+if (Mix.notifications) {
     module.exports.plugins.push(
         new plugins.WebpackNotifierPlugin({
-            title: 'Laravel Alchemy',
+            title: 'Laravel Mix',
             alwaysNotify: true,
             contentImage: 'node_modules/laravel-webpacker/icons/laravel.png'
         })
@@ -218,33 +234,33 @@ if (Alchemy.notifications) {
 
 module.exports.plugins.push(
     function() {
-        this.plugin('done', stats => Alchemy.manifest.write(stats));
+        this.plugin('done', stats => Mix.manifest.write(stats));
     }
 );
 
 
-if (Alchemy.versioning.enabled) {
-    Alchemy.versioning.record();
+if (Mix.versioning.enabled) {
+    Mix.versioning.record();
 
     module.exports.plugins.push(
         new plugins.WebpackOnBuildPlugin(stats => {
-            Alchemy.versioning.prune(Alchemy.publicPath);
+            Mix.versioning.prune(Mix.publicPath);
         })
     );
 }
 
 
-if (Alchemy.combine || Alchemy.minify) {
+if (Mix.combine || Mix.minify) {
     module.exports.plugins.push(
         new plugins.WebpackOnBuildPlugin(stats => {
-            Alchemy.concatenateAll().minifyAll();
+            Mix.concatenateAll().minifyAll();
         })
     );
 }
 
 
-if (Alchemy.copy) {
-    Alchemy.copy.forEach(copy => {
+if (Mix.copy) {
+    Mix.copy.forEach(copy => {
         module.exports.plugins.push(
             new plugins.CopyWebpackPlugin([copy])
         );
@@ -252,7 +268,7 @@ if (Alchemy.copy) {
 }
 
 
-if (Alchemy.js.vendor) {
+if (Mix.js.vendor) {
     module.exports.plugins.push(
         new webpack.optimize.CommonsChunkPlugin({
             names: ['vendor', 'manifest']
@@ -261,9 +277,9 @@ if (Alchemy.js.vendor) {
 }
 
 
-if (Alchemy.cssPreprocessor) {
-    let cssOutputPath = Alchemy[Alchemy.cssPreprocessor].output[
-        Alchemy.versioning.enabled ? 'hashedPath' : 'path'
+if (Mix.cssPreprocessor) {
+    let cssOutputPath = Mix[Mix.cssPreprocessor].output[
+        Mix.versioning.enabled ? 'hashedPath' : 'path'
     ];
 
     module.exports.plugins.push(
@@ -274,7 +290,7 @@ if (Alchemy.cssPreprocessor) {
 }
 
 
-if (Alchemy.inProduction) {
+if (Mix.inProduction) {
     module.exports.plugins = module.exports.plugins.concat([
         new webpack.DefinePlugin({
             'process.env': {

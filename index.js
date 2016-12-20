@@ -1,6 +1,5 @@
 let path = require('path');
-let Alchemy = require('./Alchemy');
-
+let Mix = require('./Mix');
 
 /**
  * We'll fetch some Webpack config plugins here for cleanliness.
@@ -20,9 +19,9 @@ module.exports.plugins = {
  * @param {string} output
  */
 module.exports.js = (entry, output) => {
-    Alchemy.js = {
+    Mix.js = {
         entry: path.resolve(entry),
-        output: new Alchemy.File(output).parsePath(),
+        output: new Mix.File(output).parsePath(),
         vendor: false
     };
 
@@ -37,7 +36,7 @@ module.exports.js = (entry, output) => {
  * @param {array} libs 
  */
 module.exports.extract = (libs) => {
-    Alchemy.js.vendor = libs;
+    Mix.js.vendor = libs;
 
     return this;
 }
@@ -50,12 +49,12 @@ module.exports.extract = (libs) => {
  * @param {string} output 
  */
 module.exports.sass = (src, output) => {
-    Alchemy.sass = {
+    Mix.sass = {
         src: path.resolve(src),
-        output: new Alchemy.File(output).parsePath()
+        output: new Mix.File(output).parsePath()
     };
 
-    Alchemy.cssPreprocessor = 'sass';
+    Mix.cssPreprocessor = 'sass';
 
     return this;
 };
@@ -68,12 +67,12 @@ module.exports.sass = (src, output) => {
  * @param {string} output 
  */
 module.exports.less = (src, output) => {
-    Alchemy.less = {
+    Mix.less = {
         src: path.resolve(src),
-        output: new Alchemy.File(output).parsePath()
+        output: new Mix.File(output).parsePath()
     };
 
-    Alchemy.cssPreprocessor = 'less';
+    Mix.cssPreprocessor = 'less';
 
     return this;
 };
@@ -86,7 +85,7 @@ module.exports.less = (src, output) => {
  * @param {string}       output 
  */
 module.exports.combine = (src, output) => {
-    Alchemy.combine = (Alchemy.combine || []).concat({ src, output });
+    Mix.combine = (Mix.combine || []).concat({ src, output });
 
     return this;
 };
@@ -99,7 +98,7 @@ module.exports.combine = (src, output) => {
  * @param {string} to
  */
 module.exports.copy = (from, to) => {
-    Alchemy.copy = (Alchemy.copy || []).concat({ 
+    Mix.copy = (Mix.copy || []).concat({ 
         from, 
         to: path.resolve(__dirname, '../../', to)
     });
@@ -114,7 +113,7 @@ module.exports.copy = (from, to) => {
  * @param {string|array} src  
  */
 module.exports.minify = (src) => {
-    Alchemy.minify = (Alchemy.minify || []).concat(src);
+    Mix.minify = (Mix.minify || []).concat(src);
 
     return this;
 };
@@ -124,7 +123,7 @@ module.exports.minify = (src) => {
  * Enable sourcemap support.
  */
 module.exports.sourceMaps = () => {
-    Alchemy.sourcemaps = (Alchemy.inProduction ? '#source-map' : '#inline-source-map');
+    Mix.sourcemaps = (Mix.inProduction ? '#source-map' : '#inline-source-map');
 
     return this;
 };
@@ -134,7 +133,7 @@ module.exports.sourceMaps = () => {
  * Enable compiled file versioning.
  */
 module.exports.version = () => {
-    Alchemy.versioning.enabled = true;
+    Mix.versioning.enabled = true;
 
     return this;
 };
@@ -144,7 +143,7 @@ module.exports.version = () => {
  * Disable all OS notifications.
  */
 module.exports.disableNotifications = () => {
-    Alchemy.notifications = false;
+    Mix.notifications = false;
 
     return this;
 };
@@ -156,7 +155,7 @@ module.exports.disableNotifications = () => {
  * @param {string} path
  */
 module.exports.setCacheDirectory = (path) => {
-    Alchemy.cachePath = path;
+    Mix.cachePath = path;
 
     return this;
 };
@@ -172,13 +171,13 @@ module.exports.mix = (mixins) => {
 
     // Since the user might wish to override the default cache 
     // path, we'll update these here with the latest values.
-    Alchemy.manifest.path = Alchemy.cachePath + '/Alchemy.json';
-    Alchemy.versioning.manifest = Alchemy.manifest;
+    Mix.manifest.path = Mix.cachePath + '/Mix.json';
+    Mix.versioning.manifest = Mix.manifest;
 
-    Alchemy.detectHotReloading();
+    Mix.detectHotReloading();
 
     return this;
 };
 
 
-module.exports.config = Alchemy;
+module.exports.config = Mix;

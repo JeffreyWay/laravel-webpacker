@@ -1,5 +1,5 @@
-let path = require('path');
 let fs = require('fs');
+let path = require('path');
 let uglify = require('uglify-js');
 let UglifyCss = require('clean-css');
 

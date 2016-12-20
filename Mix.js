@@ -6,7 +6,7 @@ let concatenate = require('concatenate');
 
 module.exports = new class {
     /**
-     * Create a new Alchemy instance. 
+     * Create a new Laravel Mix instance. 
      */
     constructor() {
         this.inProduction = process.env.NODE_ENV === 'production';
@@ -19,9 +19,22 @@ module.exports = new class {
         this.publicPath = this.isUsingLaravel() ? 'public' : './';
         this.cachePath = this.isUsingLaravel() ? 'storage/framework/cache' : './';
         
-        this.manifest = new Manifest(this.cachePath + '/Alchemy.json');
+        this.manifest = new Manifest(this.cachePath + '/Mix.json');
         this.versioning = new Versioning(this.manifest);
     }
+
+
+    /**
+     * Finalize the user's webpack.mix.js configuration file.
+     */
+    finalize() {
+        // Since the user might wish to override the default cache 
+        // path, we'll update these here with the latest values.
+        this.manifest.path = this.cachePath + '/Mix.json';
+        this.versioning.manifest = this.manifest;
+
+        this.detectHotReloading();
+    }    
 
 
     /**
@@ -57,7 +70,7 @@ module.exports = new class {
     
 
     /**
-     * Minify the given files, or those from Alchemy.minify().
+     * Minify the given files, or those from Mix.minify().
      * 
      * @param array|null files 
      */
@@ -73,7 +86,7 @@ module.exports = new class {
 
     
     /**
-     * Combine the given files, or those from Alchemy.combine().
+     * Combine the given files, or those from Mix.combine().
      * 
      * @param array|null files 
      */

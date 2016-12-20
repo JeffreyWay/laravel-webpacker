@@ -1,7 +1,7 @@
 {
   "name": "laravel-webpacker",
   "version": "0.1.0",
-  "description": "An elegant wrapper around Webpack for the 80% usecase.",
+  "description": "Laravel Mix is an elegant wrapper around Webpack for the 80% usecase.",
   "main": "index.js",
   "scripts": {
     "dev": "webpack --watch --progress --hide-modules",
@@ -17,7 +17,7 @@
     "laravel",
     "webpack",
     "laravel elixir",
-    "laravel alchemy"
+    "laravel mix"
   ],
   "author": "Jeffrey Way",
   "license": "MIT",
