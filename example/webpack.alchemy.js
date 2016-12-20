@@ -1,7 +1,7 @@
 let Alchemy = require('laravel-webpacker');
 
 module.exports = Alchemy.mix(mix => {
-    mix.js('src/app.js', 'dist/app.js');
+    mix.js('src/app.js', 'dist/app.js')
        .sass('src/app.scss', 'dist/app.scss');
 });
 
