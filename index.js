@@ -1,5 +1,5 @@
 let path = require('path');
-let Alchemy.json = require('./Alchemy.json');
+let Alchemy = require('./Alchemy');
 
 
 /**
@@ -20,9 +20,9 @@ module.exports.plugins = {
  * @param {string} output
  */
 module.exports.js = (entry, output) => {
-    Alchemy.json.js = {
+    Alchemy.js = {
         entry: path.resolve(entry),
-        output: new Alchemy.json.File(output).parsePath(),
+        output: new Alchemy.File(output).parsePath(),
         vendor: false
     };
 
@@ -37,7 +37,7 @@ module.exports.js = (entry, output) => {
  * @param {array} libs 
  */
 module.exports.extract = (libs) => {
-    Alchemy.json.js.vendor = libs;
+    Alchemy.js.vendor = libs;
 
     return this;
 }
@@ -50,12 +50,12 @@ module.exports.extract = (libs) => {
  * @param {string} output 
  */
 module.exports.sass = (src, output) => {
-    Alchemy.json.sass = {
+    Alchemy.sass = {
         src: path.resolve(src),
-        output: new Alchemy.json.File(output).parsePath()
+        output: new Alchemy.File(output).parsePath()
     };
 
-    Alchemy.json.cssPreprocessor = 'sass';
+    Alchemy.cssPreprocessor = 'sass';
 
     return this;
 };
@@ -68,12 +68,12 @@ module.exports.sass = (src, output) => {
  * @param {string} output 
  */
 module.exports.less = (src, output) => {
-    Alchemy.json.less = {
+    Alchemy.less = {
         src: path.resolve(src),
-        output: new Alchemy.json.File(output).parsePath()
+        output: new Alchemy.File(output).parsePath()
     };
 
-    Alchemy.json.cssPreprocessor = 'less';
+    Alchemy.cssPreprocessor = 'less';
 
     return this;
 };
@@ -86,7 +86,7 @@ module.exports.less = (src, output) => {
  * @param {string}       output 
  */
 module.exports.combine = (src, output) => {
-    Alchemy.json.combine = (Alchemy.json.combine || []).concat({ src, output });
+    Alchemy.combine = (Alchemy.combine || []).concat({ src, output });
 
     return this;
 };
@@ -99,7 +99,7 @@ module.exports.combine = (src, output) => {
  * @param {string} to
  */
 module.exports.copy = (from, to) => {
-    Alchemy.json.copy = (Alchemy.json.copy || []).concat({ 
+    Alchemy.copy = (Alchemy.copy || []).concat({ 
         from, 
         to: path.resolve(__dirname, '../../', to)
     });
@@ -114,7 +114,7 @@ module.exports.copy = (from, to) => {
  * @param {string|array} src  
  */
 module.exports.minify = (src) => {
-    Alchemy.json.minify = (Alchemy.json.minify || []).concat(src);
+    Alchemy.minify = (Alchemy.minify || []).concat(src);
 
     return this;
 };
@@ -124,7 +124,7 @@ module.exports.minify = (src) => {
  * Enable sourcemap support.
  */
 module.exports.sourceMaps = () => {
-    Alchemy.json.sourcemaps = (Alchemy.json.inProduction ? '#source-map' : '#eval-source-map');
+    Alchemy.sourcemaps = (Alchemy.inProduction ? '#source-map' : '#inline-source-map');
 
     return this;
 };
@@ -134,7 +134,7 @@ module.exports.sourceMaps = () => {
  * Enable compiled file versioning.
  */
 module.exports.version = () => {
-    Alchemy.json.versioning.enabled = true;
+    Alchemy.versioning.enabled = true;
 
     return this;
 };
@@ -144,7 +144,7 @@ module.exports.version = () => {
  * Disable all OS notifications.
  */
 module.exports.disableNotifications = () => {
-    Alchemy.json.notifications = false;
+    Alchemy.notifications = false;
 
     return this;
 };
@@ -156,7 +156,7 @@ module.exports.disableNotifications = () => {
  * @param {string} path
  */
 module.exports.setCacheDirectory = (path) => {
-    Alchemy.json.cachePath = path;
+    Alchemy.cachePath = path;
 
     return this;
 };
@@ -172,13 +172,13 @@ module.exports.mix = (mixins) => {
 
     // Since the user might wish to override the default cache 
     // path, we'll update these here with the latest values.
-    Alchemy.json.manifest.path = Alchemy.json.cachePath + '/Alchemy.json.json';
-    Alchemy.json.versioning.manifest = Alchemy.json.manifest;
+    Alchemy.manifest.path = Alchemy.cachePath + '/Alchemy.json';
+    Alchemy.versioning.manifest = Alchemy.manifest;
 
-    Alchemy.json.detectHotReloading();
+    Alchemy.detectHotReloading();
 
     return this;
 };
 
 
-module.exports.config = Alchemy.json;
+module.exports.config = Alchemy;
