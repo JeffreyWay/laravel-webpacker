@@ -67,7 +67,7 @@ class Versioning {
             // If the updated file is exactly the same as the old
             // one, then nothing has changed. Don't delete it.
             if (! updated.files.includes(file)) {
-                this.manifest.remove(path.resolve(baseDir, file));
+                this.manifest.remove(path.join(baseDir, file));
             }
         });
 
