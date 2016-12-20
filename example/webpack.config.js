@@ -72,7 +72,7 @@ module.exports.module = {
         },
 
         {
-            test: /\.(png|jpg|gif|svg)$/,
+            test: /\.(png|jpg|gif)$/,
             loader: 'file-loader',
             options: {
                 name: '[name].[ext]?[hash]'
@@ -80,7 +80,7 @@ module.exports.module = {
         },
 
         {
-            test: /\.(woff2?|ttf|eot)$/,
+            test: /\.(woff2?|ttf|eot|svg)$/,
             loader: 'file-loader',
             options: {
                 name: path.relative(__dirname, './fonts/[name].[ext]?[hash]')
