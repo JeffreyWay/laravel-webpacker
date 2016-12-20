@@ -161,23 +161,5 @@ module.exports.setCacheDirectory = (path) => {
 };
 
 
-/**
- * Construct the user's desired Webpack configuration.
- * 
- * @param {function} mixins 
- */
-module.exports.mix = (mixins) => {
-    mixins(module.exports);
-
-    // Since the user might wish to override the default cache 
-    // path, we'll update these here with the latest values.
-    Mix.manifest.path = Mix.cachePath + '/Mix.json';
-    Mix.versioning.manifest = Mix.manifest;
-
-    Mix.detectHotReloading();
-
-    return this;
-};
-
-
 module.exports.config = Mix;
+module.exports.mix = module.exports;
