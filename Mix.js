@@ -125,6 +125,26 @@ module.exports = new class {
 
 
     /**
+     * Fetch the appropriate Babel config for babel-loader.
+     * 
+     * @return {string}
+     */
+    babelConfig() {
+        let file = path.resolve(__dirname, '../../.babelrc');
+
+        // If the user has defined their own .babelrc file, 
+        // the babel-loader will automatically fetch it.
+        // Otherwise, we'll use these defaults.
+        return this.File.exists(file) ? '' : '?' + JSON.stringify({
+            "cacheDirectory": true,
+            "presets": [
+                ["es2015", { "modules": false }]
+            ]
+        });
+    }
+
+
+    /**
      * Determine if we are working with a Laravel project.
      */
     isUsingLaravel() {

@@ -72,7 +72,7 @@ module.exports.module = {
             loader: 'vue-loader',
             options: {
                 loaders: {
-                    js: 'babel-loader?cacheDirectory=true'
+                    js: 'babel-loader' + Mix.babelConfig()
                   },
                   
                   postcss: [
@@ -83,8 +83,8 @@ module.exports.module = {
 
         {
             test: /\.js$/,
-            loader: 'babel-loader?cacheDirectory=true',
-            exclude: /(node_modules|bower_components)/
+            exclude: /(node_modules|bower_components)/,
+            loader: 'babel-loader' + Mix.babelConfig()
         },
 
         {
